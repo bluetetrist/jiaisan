@@ -265,43 +265,13 @@
 
     window.onload = function() {
         document.getElementById('fishDate').valueAsDate = new Date();
-        // 起動時に過去データを自動クレンジング・修正する
-        migrateData();
         updateGraph();
         renderList();
     };
 
     function timeToMinutes(timeStr) {
-        if (!timeStr) return 0;
         const [h, m] = timeStr.split(':').map(Number);
         return h * 60 + m;
-    }
-
-    // 【新設：過去データ自動救済システム】
-    function migrateData() {
-        let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-        let updated = false;
-
-        currentData = currentData.map(item => {
-            // もし古いデータで「下げ」なのに一分方向（数値が小さい状態）になってしまっているものを検知
-            // バージョン管理フラグ(v: 2)がないデータを対象に救済
-            if (!item.v) {
-                // 過去データに満干データ(prev/next)が残っていない暫定救済措置として、
-                // 間違って保存された「下げ一分〜三分（1〜3）」を、直感的な「下げ九分〜七分（9〜7）」へ安全に反転スライドさせます
-                if (item.type === '下げ') {
-                    item.portion = 10 - item.portion;
-                    if (item.portion < 1) item.portion = 1;
-                    if (item.portion > 9) item.portion = 9;
-                }
-                item.v = 2; // 修正済みフラグを付与
-                updated = true;
-            }
-            return item;
-        });
-
-        if (updated) {
-            localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
-        }
     }
 
     function saveData() {
@@ -327,8 +297,7 @@
             if (times[i] && times[i].value) {
                 tideEvents.push({
                     type: types[i].value,
-                    minutes: timeToMinutes(times[i].value),
-                    rawTime: times[i].value
+                    minutes: timeToMinutes(times[i].value)
                 });
             }
         }
@@ -385,15 +354,7 @@
             spot: spotName,
             type: tideType, 
             portion: portion, 
-            displayTime: catchTimeStr,
-            v: 2, // 現行の正しい仕様データであるフラグ
-            // 将来の再計算に備え、入力された前後の潮汐環境を歴史遺産としてデータに内包させる
-            meta: {
-                prevType: prevEvent.type,
-                prevTime: prevEvent.rawTime,
-                nextType: nextEvent.type,
-                nextTime: nextEvent.rawTime
-            }
+            displayTime: catchTimeStr
         };
 
         let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
