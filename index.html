@@ -265,11 +265,13 @@
 
     window.onload = function() {
         document.getElementById('fishDate').valueAsDate = new Date();
+        // 過去データを勝手に破壊する移行ロジックを完全廃止
         updateGraph();
         renderList();
     };
 
     function timeToMinutes(timeStr) {
+        if (!timeStr) return 0;
         const [h, m] = timeStr.split(':').map(Number);
         return h * 60 + m;
     }
@@ -341,6 +343,7 @@
         let portion = Math.floor(ratio * 9) + 1;
         if (portion > 9) portion = 9;
 
+        // 正しい反転仕様：満潮直後は「九分（9）」、干潮接近は「一分（1）」
         if (tideType === '下げ') {
             portion = 10 - portion;
         }
