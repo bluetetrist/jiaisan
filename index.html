@@ -4,116 +4,180 @@
 <head>
 
 	<meta charset="UTF-8">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<title>潮時合データベース</title>
 
 	<style>
 		body {
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+			font-family:
+				-apple-system,
+				BlinkMacSystemFont,
+				"Segoe UI",
+				sans-serif;
+
 			background: #f4f6f9;
+
 			margin: 0;
+
 			padding: 15px;
+
 			color: #333;
 		}
 
 		.card {
+
 			background: #fff;
+
 			border-radius: 12px;
+
 			padding: 20px;
+
 			margin-bottom: 15px;
-			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+			box-shadow:
+				0 4px 6px rgba(0, 0, 0, 0.05);
 		}
 
 		h2 {
+
 			margin-top: 0;
+
 			color: #1a365d;
 		}
 
 		.input-group {
+
 			margin-bottom: 12px;
 		}
 
 		label {
+
 			display: block;
+
 			font-size: 13px;
+
 			font-weight: bold;
+
 			margin-bottom: 5px;
 		}
 
 		input,
 		select {
+
 			width: 100%;
+
 			padding: 10px;
+
 			border: 1px solid #ccc;
+
 			border-radius: 6px;
+
 			box-sizing: border-box;
+
 			font-size: 16px;
 		}
 
 		button {
+
 			width: 100%;
+
 			padding: 12px;
+
 			border: none;
+
 			border-radius: 6px;
+
 			background: #2b6cb0;
+
 			color: #fff;
+
 			font-size: 16px;
+
 			font-weight: bold;
+
 			cursor: pointer;
+
 			margin-top: 10px;
 		}
 
 		button:active {
+
 			background: #2c5282;
 		}
 
 		table {
+
 			width: 100%;
+
 			border-collapse: collapse;
+
 			margin-top: 10px;
 		}
 
 		th,
 		td {
+
 			border: 1px solid #ddd;
+
 			padding: 8px;
+
 			text-align: center;
+
 			font-size: 14px;
 		}
 
 		th {
+
 			background: #f7fafc;
 		}
 
 		.good {
+
 			background: #fff7e6;
+
 			font-weight: bold;
+
 			color: #dd6b20;
 		}
 
 		.section-title {
+
 			margin-top: 25px;
 		}
 
 		.delete-btn {
+
 			background: #e53e3e;
+
 			padding: 6px 10px;
+
 			font-size: 12px;
+
 			margin: 0;
 		}
 
 		canvas {
+
 			width: 100%;
+
 			max-width: 100%;
+
 			background: #fff;
+
 			border: 1px solid #ddd;
+
 			border-radius: 8px;
+
 			margin-top: 15px;
 		}
 
 		.small {
+
 			font-size: 12px;
+
 			color: #666;
 		}
 	</style>
@@ -131,82 +195,157 @@
 		<h2>今日の潮</h2>
 
 		<div class="input-group">
+
 			<label>日付</label>
-			<input type="date" id="tideDate">
+
+			<input
+    type="date"
+    id="tideDate"
+>
+
 </div>
 
 			<div class="input-group">
+
 				<label>潮回り</label>
+
 				<select id="dayTideType">
+
 <option>大潮</option>
 <option>中潮</option>
 <option>小潮</option>
 <option>長潮</option>
 <option>若潮</option>
+
 </select>
+
 			</div>
 
 			<div class="input-group">
+
 				<label>エリア</label>
-				<input type="text" id="areaInput" list="areaList">
+
+				<input
+    type="text"
+    id="areaInput"
+    list="areaList"
+>
+
 				<datalist id="areaList"></datalist>
+
 			</div>
 
 			<div class="input-group">
+
 				<label>スポット</label>
-				<input type="text" id="spotInput" list="spotList">
+
+				<input
+    type="text"
+    id="spotInput"
+    list="spotList"
+>
+
 				<datalist id="spotList"></datalist>
+
 			</div>
 
 			<table>
 
 				<thead>
+
 					<tr>
+
 						<th>種類</th>
 						<th>時間</th>
+
 					</tr>
+
 				</thead>
 
 				<tbody id="tideTable">
 
 					<tr>
+
 						<td>
+
 							<select>
+
 <option value="満潮">満潮</option>
 <option value="干潮">干潮</option>
+
 </select>
+
 						</td>
-						<td><input type="time"></td>
+
+						<td>
+
+							<input type="time">
+
+</td>
+
 					</tr>
 
 					<tr>
+
 						<td>
+
 							<select>
+
 <option value="干潮">干潮</option>
 <option value="満潮">満潮</option>
+
 </select>
+
 						</td>
-						<td><input type="time"></td>
+
+						<td>
+
+							<input type="time">
+
+</td>
+
 					</tr>
 
 					<tr>
+
 						<td>
+
 							<select>
+
 <option value="満潮">満潮</option>
 <option value="干潮">干潮</option>
+
 </select>
+
 						</td>
-						<td><input type="time"></td>
+
+						<td>
+
+							<input type="time">
+
+</td>
+
 					</tr>
 
 					<tr>
+
 						<td>
+
 							<select>
+
 <option value="干潮">干潮</option>
 <option value="満潮">満潮</option>
+
 </select>
+
 						</td>
-						<td><input type="time"></td>
+
+						<td>
+
+							<input type="time">
+
+</td>
+
 					</tr>
 
 				</tbody>
@@ -214,7 +353,9 @@
 			</table>
 
 			<button onclick="saveTideDay()">
+
 潮を保存
+
 </button>
 
 		</div>
@@ -228,23 +369,45 @@
 			<h2>釣果登録</h2>
 
 			<div class="input-group">
+
 				<label>釣れた時間</label>
-				<input type="time" id="fishTime">
+
+				<input
+    type="time"
+    id="fishTime"
+>
+
 </div>
 
 				<div class="input-group">
+
 					<label>魚種</label>
-					<input type="text" id="fishName" list="fishList">
+
+					<input
+    type="text"
+    id="fishName"
+    list="fishList"
+>
+
 					<datalist id="fishList"></datalist>
+
 				</div>
 
 				<div class="input-group">
+
 					<label>サイズ（cm・任意）</label>
-					<input type="number" id="fishSize">
+
+					<input
+    type="number"
+    id="fishSize"
+>
+
 </div>
 
 					<button onclick="saveFish()">
+
 釣果を追加
+
 </button>
 
 				</div>
@@ -260,18 +423,22 @@
 					<table>
 
 						<thead>
+
 							<tr>
+
+								<th>日付</th>
 								<th>時間</th>
 								<th>魚</th>
 								<th>サイズ</th>
 								<th>潮</th>
 								<th>潮回り</th>
 								<th>削除</th>
+
 							</tr>
+
 						</thead>
 
-						<tbody id="fishBody">
-						</tbody>
+						<tbody id="fishBody"></tbody>
 
 					</table>
 
@@ -285,8 +452,7 @@
 
 					<h2>魚種別 時合集計</h2>
 
-					<div id="summaryArea">
-					</div>
+					<div id="summaryArea"></div>
 
 				</div>
 
@@ -306,55 +472,79 @@
     id="graphFish"
     onchange="drawGraph()"
 >
-    <option value="">
-        選択してください
-    </option>
+
+<option value="">
+選択してください
+</option>
+
 </select>
 
 					</div>
 
-					<canvas id="graphCanvas" width="700" height="320"></canvas>
+					<canvas id="graphCanvas" width="800" height="420"></canvas>
 
-					<div class="small">
-						青：上げ　
-						オレンジ：下げ　
-						横軸：潮位
+					<div class="small" style="
+        margin-top:10px;
+        line-height:1.7;
+    ">
+
+						青：上げ潮（干潮→満潮）<br>
+黄：下げ潮（満潮→干潮）<br>
+横軸は潮位帯です<br><br>
+
+例：<br>
+
+「上げ3分 / 下げ7分」<br>
+
+＝ 同じ潮位付近
+
+</div>
+
 					</div>
 
-				</div>
+					<!-- ========================= -->
+					<!-- バックアップ -->
+					<!-- ========================= -->
 
-				<!-- ========================= -->
-				<!-- バックアップ -->
-				<!-- ========================= -->
+					<div class="card">
 
-				<div class="card">
+						<h2>データバックアップ</h2>
 
-					<h2>データバックアップ</h2>
+						<button onclick="exportData()">
 
-					<button onclick="exportData()">
 データを書き出す
+
 </button>
 
-					<div class="small">
-						JSON形式でバックアップ保存します
-					</div>
+						<div class="small">
 
-					<br><br>
+							JSON形式で保存します
 
-					<input type="file" id="importFile">
+						</div>
 
-					<button onclick="importData()">
+						<br><br>
+
+						<input
+    type="file"
+    id="importFile"
+>
+
+						<button onclick="importData()">
+
 データを復元
+
 </button>
 
-					<div class="small">
-						以前書き出したJSONを復元します
+						<div class="small">
+
+							JSONバックアップを復元します
+
+						</div>
+
 					</div>
 
-				</div>
-
-				<script>
-					// ======================
+					<script>
+						// ======================
 // 時間変換
 // ======================
 
@@ -377,7 +567,9 @@ function timeToMin(timeStr){
 function saveSpot(area,spot){
 
     let spots =
-        JSON.parse(localStorage.getItem('spots')) || [];
+        JSON.parse(
+            localStorage.getItem('spots')
+        ) || [];
 
     const exists =
         spots.find(
@@ -388,7 +580,10 @@ function saveSpot(area,spot){
 
     if(!exists){
 
-        spots.push({ area, spot });
+        spots.push({
+            area,
+            spot
+        });
 
         localStorage.setItem(
             'spots',
@@ -415,10 +610,14 @@ function loadSpotList(){
     spotList.innerHTML = '';
 
     const spots =
-        JSON.parse(localStorage.getItem('spots')) || [];
+        JSON.parse(
+            localStorage.getItem('spots')
+        ) || [];
 
     const areas =
-        [...new Set(spots.map(s => s.area))];
+        [...new Set(
+            spots.map(s => s.area)
+        )];
 
     areas.forEach(a => {
 
@@ -435,7 +634,7 @@ function loadSpotList(){
         const option =
             document.createElement('option');
 
-            option.value = s.spot;
+        option.value = s.spot;
 
         spotList.appendChild(option);
     });
@@ -448,7 +647,9 @@ function loadSpotList(){
 function saveFishName(name){
 
     let fishes =
-        JSON.parse(localStorage.getItem('fishNames')) || [];
+        JSON.parse(
+            localStorage.getItem('fishNames')
+        ) || [];
 
     if(!fishes.includes(name)){
 
@@ -476,7 +677,9 @@ function loadFishList(){
     fishList.innerHTML = '';
 
     const fishes =
-        JSON.parse(localStorage.getItem('fishNames')) || [];
+        JSON.parse(
+            localStorage.getItem('fishNames')
+        ) || [];
 
     fishes.forEach(f => {
 
@@ -505,7 +708,9 @@ function loadGraphFishList(){
         '<option value="">選択してください</option>';
 
     const fishes =
-        JSON.parse(localStorage.getItem('fishNames')) || [];
+        JSON.parse(
+            localStorage.getItem('fishNames')
+        ) || [];
 
     fishes.forEach(f => {
 
@@ -621,6 +826,7 @@ function restoreCurrentTide(){
         document.querySelectorAll('#tideTable tr');
 
     rows.forEach(row => {
+
         row.querySelector('input').value = '';
     });
 
@@ -673,6 +879,7 @@ function calcTideLabel(prev,next,fishMin){
     const weights = [1,2,3,3,2,1];
 
     let currentWeight = 0;
+
     let phase = 0;
 
     for(let i=0;i<weights.length;i++){
@@ -707,6 +914,7 @@ function calcTideLabel(prev,next,fishMin){
         tideLevel = 10;
     }
 
+    // 下げ
     if(prev.type === '満潮'){
 
         const remain =
@@ -719,6 +927,7 @@ function calcTideLabel(prev,next,fishMin){
         return `下げ${remain}分`;
     }
 
+    // 上げ
     else{
 
         if(tideLevel <= 0 || tideLevel >= 10){
@@ -821,15 +1030,19 @@ function saveFish(){
     records.push({
 
         date: current.date,
+
         tideType: current.tideType,
 
         area: current.area,
+
         spot: current.spot,
 
         fish: fishName,
+
         size: fishSize,
 
         time: fishTime,
+
         tide: tideLabel
     });
 
@@ -839,9 +1052,11 @@ function saveFish(){
     );
 
     loadFish();
+
     drawGraph();
 
     document.getElementById('fishTime').value = '';
+
     document.getElementById('fishSize').value = '';
 }
 
@@ -868,6 +1083,7 @@ function deleteFish(index){
     );
 
     loadFish();
+
     drawGraph();
 }
 
@@ -899,6 +1115,7 @@ function loadFish(){
             document.createElement('tr');
 
         tr.innerHTML = `
+            <td>${r.date}</td>
             <td>${r.time}</td>
             <td>${r.fish}</td>
             <td>${r.size || '-'}</td>
@@ -955,6 +1172,7 @@ function createSummary(records){
             document.createElement('h3');
 
         title.className = 'section-title';
+
         title.textContent = key;
 
         area.appendChild(title);
@@ -1005,6 +1223,7 @@ function createSummary(records){
 
 // ======================
 // グラフ
+// 潮位対称モデル
 // ======================
 
 function drawGraph(){
@@ -1034,18 +1253,26 @@ function drawGraph(){
             localStorage.getItem('fishRecords')
         ) || [];
 
-    const levels = [
-        1,2,3,4,5,6,7,8,9
+    const labels = [
+
+        '上げ1分 / 下げ9分',
+        '上げ2分 / 下げ8分',
+        '上げ3分 / 下げ7分',
+        '上げ4分 / 下げ6分',
+        '上げ5分 / 下げ5分',
+        '上げ6分 / 下げ4分',
+        '上げ7分 / 下げ3分',
+        '上げ8分 / 下げ2分',
+        '上げ9分 / 下げ1分'
     ];
 
-    const riseCounts = {};
-    const fallCounts = {};
+    const riseCounts = [
+        0,0,0,0,0,0,0,0,0
+    ];
 
-    levels.forEach(level => {
-
-        riseCounts[level] = 0;
-        fallCounts[level] = 0;
-    });
+    const fallCounts = [
+        0,0,0,0,0,0,0,0,0
+    ];
 
     records.forEach(r => {
 
@@ -1053,6 +1280,7 @@ function drawGraph(){
             return;
         }
 
+        // 上げ
         if(r.tide.includes('上げ')){
 
             const num =
@@ -1062,11 +1290,16 @@ function drawGraph(){
                         .replace('分','')
                 );
 
-            if(riseCounts[num] !== undefined){
-                riseCounts[num]++;
+            if(num >= 1 && num <= 9){
+
+                const index =
+                    num - 1;
+
+                riseCounts[index]++;
             }
         }
 
+        // 下げ
         if(r.tide.includes('下げ')){
 
             const num =
@@ -1076,73 +1309,97 @@ function drawGraph(){
                         .replace('分','')
                 );
 
-            const level =
-                10 - num;
+            if(num >= 1 && num <= 9){
 
-            if(fallCounts[level] !== undefined){
-                fallCounts[level]++;
+                const index =
+                    9 - num;
+
+                fallCounts[index]++;
             }
         }
     });
 
-    const allValues = [];
-
-    levels.forEach(level => {
-
-        allValues.push(
-            riseCounts[level]
-        );
-
-        allValues.push(
-            fallCounts[level]
-        );
-    });
+    const allValues = [
+        ...riseCounts,
+        ...fallCounts
+    ];
 
     const max =
         Math.max(...allValues,1);
 
-    const startX = 60;
-    const baseY = 260;
+    const startX = 80;
 
-    const groupWidth = 60;
-
-    const barWidth = 18;
+    const baseY = 300;
 
     const graphHeight = 180;
 
-    ctx.font = '16px sans-serif';
+    const groupWidth = 72;
 
+    const barWidth = 20;
+
+    // タイトル
     ctx.fillStyle = '#000';
 
+    ctx.font = '18px sans-serif';
+
     ctx.fillText(
-        `${fish} 潮位別ヒット`,
+        `${fish} 潮位帯分析`,
         20,
-        25
+        30
     );
 
+    // Y軸
     ctx.beginPath();
 
-    ctx.moveTo(startX,40);
+    ctx.moveTo(startX,60);
 
     ctx.lineTo(startX,baseY);
 
     ctx.stroke();
 
+    // X軸
     ctx.beginPath();
 
     ctx.moveTo(startX,baseY);
 
-    ctx.lineTo(650,baseY);
+    ctx.lineTo(760,baseY);
 
     ctx.stroke();
 
-    levels.forEach((level,index)=>{
+    // Y目盛
+    ctx.font = '12px sans-serif';
+
+    for(let i=0;i<=max;i++){
+
+        const y =
+            baseY -
+            (i / max) * graphHeight;
+
+        ctx.fillText(
+            i,
+            50,
+            y + 5
+        );
+
+        ctx.strokeStyle = '#ddd';
+
+        ctx.beginPath();
+
+        ctx.moveTo(startX,y);
+
+        ctx.lineTo(760,y);
+
+        ctx.stroke();
+    }
+
+    // 棒
+    labels.forEach((label,index)=>{
 
         const rise =
-            riseCounts[level];
+            riseCounts[index];
 
         const fall =
-            fallCounts[level];
+            fallCounts[index];
 
         const riseHeight =
             (rise / max)
@@ -1153,10 +1410,12 @@ function drawGraph(){
             * graphHeight;
 
         const x =
-            startX + 20 + index * groupWidth;
+            startX +
+            20 +
+            index * groupWidth;
 
         // 上げ
-        ctx.fillStyle = '#3182ce';
+        ctx.fillStyle = '#4c6ef5';
 
         ctx.fillRect(
             x,
@@ -1166,15 +1425,16 @@ function drawGraph(){
         );
 
         // 下げ
-        ctx.fillStyle = '#dd6b20';
+        ctx.fillStyle = '#f0c419';
 
         ctx.fillRect(
-            x + 22,
+            x + 24,
             baseY - fallHeight,
             barWidth,
             fallHeight
         );
 
+        // 数字
         ctx.fillStyle = '#000';
 
         ctx.font = '11px sans-serif';
@@ -1187,51 +1447,71 @@ function drawGraph(){
 
         ctx.fillText(
             fall,
-            x + 22,
+            x + 24,
             baseY - fallHeight - 5
         );
 
-        ctx.fillText(
-            level,
-            x + 10,
-            baseY + 20
+        // ラベル
+        ctx.save();
+
+        ctx.translate(
+            x + 8,
+            baseY + 18
         );
+
+        ctx.rotate(
+            -Math.PI / 4
+        );
+
+        ctx.font = '11px sans-serif';
+
+        ctx.fillText(
+            label,
+            0,
+            0
+        );
+
+        ctx.restore();
     });
 
     // 凡例
-    ctx.fillStyle = '#3182ce';
+    ctx.fillStyle = '#4c6ef5';
 
-    ctx.fillRect(500,20,15,15);
-
-    ctx.fillStyle = '#000';
-
-    ctx.fillText(
-        '上げ',
-        520,
-        32
-    );
-
-    ctx.fillStyle = '#dd6b20';
-
-    ctx.fillRect(570,20,15,15);
-
-    ctx.fillStyle = '#000';
-
-    ctx.fillText(
-        '下げ',
-        590,
-        32
-    );
-
-    ctx.fillText(
-        '潮位',
+    ctx.fillRect(
+        120,
+        15,
         20,
-        baseY + 20
+        20
+    );
+
+    ctx.fillStyle = '#000';
+
+    ctx.fillText(
+        '上げ潮（干潮→）',
+        150,
+        30
+    );
+
+    ctx.fillStyle = '#f0c419';
+
+    ctx.fillRect(
+        350,
+        15,
+        20,
+        20
+    );
+
+    ctx.fillStyle = '#000';
+
+    ctx.fillText(
+        '下げ潮（満潮→）',
+        380,
+        30
     );
 }
 
 // ======================
-// エクスポート
+// バックアップ
 // ======================
 
 function exportData(){
@@ -1291,7 +1571,7 @@ function exportData(){
 }
 
 // ======================
-// インポート
+// 復元
 // ======================
 
 function importData(){
@@ -1363,16 +1643,20 @@ function importData(){
 }
 
 // ======================
-// 起動時
+// 起動
 // ======================
 
 restoreCurrentTide();
+
 loadFish();
+
 loadSpotList();
+
 loadFishList();
+
 loadGraphFishList();
 
-				</script>
+					</script>
 
 </body>
 
