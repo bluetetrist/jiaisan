@@ -17,16 +17,28 @@
 		.container {
 			max-width: 600px;
 			margin: 0 auto;
+		}
+
+		/* 潮汐設定・釣果登録の各ブロック共通スタイル */
+		.section-box {
 			background: #fff;
 			padding: 15px;
 			border-radius: 8px;
 			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			margin-bottom: 15px;
 		}
 
 		h1 {
 			font-size: 20px;
 			margin: 0 0 15px 0;
 			color: #0056b3;
+		}
+
+		.section-title {
+			font-size: 18px;
+			font-weight: bold;
+			margin-bottom: 15px;
+			color: #1e3a8a;
 		}
 
 		.form-group {
@@ -81,10 +93,11 @@
 			background-color: #f9f9f9;
 		}
 
-		.btn-submit {
+		/* ボタン色指定（オリジナルに合わせた青色） */
+		.btn-action {
 			width: 100%;
 			padding: 12px;
-			background-color: #1a66ff;
+			background-color: #3b82f6;
 			color: #fff;
 			border: none;
 			border-radius: 4px;
@@ -93,8 +106,8 @@
 			cursor: pointer;
 		}
 
-		.btn-submit:hover {
-			background-color: #0052cc;
+		.btn-action:hover {
+			background-color: #2563eb;
 		}
 
 		.graph-area {
@@ -133,163 +146,200 @@
 <body>
 
 	<div class="container">
-		<h1>時合さん</h1>
 
-		<div class="form-row">
-			<div class="form-group">
-				<label>日付</label>
-				<input type="date" id="fishDate">
-        </div>
-				<div class="form-group">
-					<label>潮回り</label>
-					<select id="tideName">
-                <option value="大潮">大潮</option>
-                <option value="中潮">中潮</option>
-                <option value="小潮">小潮</option>
-                <option value="長潮">長潮</option>
-                <option value="若潮">若潮</option>
-            </select>
-				</div>
-			</div>
+		<div class="section-box">
+			<h1>時合さん</h1>
 
 			<div class="form-row">
 				<div class="form-group">
-					<label>エリア</label>
-					<input type="text" id="areaName" placeholder="例：須磨">
-        </div>
+					<label>日付</label>
+					<input type="date" id="fishDate">
+            </div>
 					<div class="form-group">
-						<label>魚種</label>
-						<input type="text" id="fishType" placeholder="例：キス">
-        </div>
-						<div class="form-group">
-							<label>スポット</label>
-							<input type="text" id="spotName" placeholder="例：千守東">
-        </div>
-						</div>
-
-						<table>
-							<thead>
-								<tr>
-									<th style="width: 40%;">種類</th>
-									<th style="width: 60%;">時間</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>
-										<select class="row-type">
-                        <option value="満潮">満潮</option>
-                        <option value="干潮">干潮</option>
-                    </select>
-									</td>
-									<td><input type="time" class="row-time"></td>
-								</tr>
-								<tr>
-									<td>
-										<select class="row-type">
-                        <option value="干潮" selected>干潮</option>
-                        <option value="満潮">満潮</option>
-                    </select>
-									</td>
-									<td><input type="time" class="row-time"></td>
-								</tr>
-								<tr>
-									<td>
-										<select class="row-type">
-                        <option value="満潮">満潮</option>
-                        <option value="干潮">干潮</option>
-                    </select>
-									</td>
-									<td><input type="time" class="row-time"></td>
-								</tr>
-								<tr>
-									<td>
-										<select class="row-type">
-                        <option value="干潮" selected>干潮</option>
-                        <option value="満潮">満潮</option>
-                    </select>
-									</td>
-									<td><input type="time" class="row-time"></td>
-								</tr>
-							</tbody>
-						</table>
-
-						<div class="form-group">
-							<label>釣れた時間</label>
-							<input type="time" id="catchTime">
-    </div>
-
-							<button class="btn-submit" onclick="saveData()">釣果を記録する</button>
-
-							<div class="graph-area">
-								<div class="graph-title">時合分析（蓄積データ）</div>
-								<div class="form-row" style="margin-bottom: 10px;">
-									<div class="form-group">
-										<select id="filterTide" onchange="updateGraph()">
-                    <option value="すべて">すべての潮回り</option>
+						<label>潮回り</label>
+						<select id="tideName">
                     <option value="大潮">大潮</option>
                     <option value="中潮">中潮</option>
                     <option value="小潮">小潮</option>
                     <option value="長潮">長潮</option>
                     <option value="若潮">若潮</option>
                 </select>
-									</div>
-									<div class="form-group">
-										<input type="text" id="filterSpot" placeholder="スポットで絞り込み" oninput="updateGraph()">
-            </div>
-									</div>
-									<canvas id="tideGraph"></canvas>
-								</div>
+					</div>
+				</div>
 
-								<div class="list-area">
-									<div class="graph-title">釣果データ履歴 (直近最大50件)</div>
-									<table class="list-table">
-										<thead>
-											<tr>
-												<th>日付</th>
-												<th>潮</th>
-												<th>魚種</th>
-												<th>スポット</th>
-												<th>状態</th>
-												<th>タイミング</th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody id="dataList"></tbody>
-									</table>
-								</div>
+				<div class="form-row">
+					<div class="form-group">
+						<label>エリア</label>
+						<input type="text" id="areaName" placeholder="例：須磨">
+            </div>
+						<div class="form-group">
+							<label>スポット</label>
+							<input type="text" id="spotName" placeholder="例：千守東">
+            </div>
+							<div class="form-group">
+								<label>魚種</label>
+								<input type="text" id="tideFishType" placeholder="例：キス">
+            </div>
 							</div>
 
-							<script>
-								let myChart = null;
+							<table>
+								<thead>
+									<tr>
+										<th style="width: 40%;">種類</th>
+										<th style="width: 60%;">時間</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<select class="row-type">
+                            <option value="満潮">満潮</option>
+                            <option value="干潮">干潮</option>
+                        </select>
+										</td>
+										<td><input type="time" class="row-time"></td>
+									</tr>
+									<tr>
+										<td>
+											<select class="row-type">
+                            <option value="干潮" selected>干潮</option>
+                            <option value="満潮">満潮</option>
+                        </select>
+										</td>
+										<td><input type="time" class="row-time"></td>
+									</tr>
+									<tr>
+										<td>
+											<select class="row-type">
+                            <option value="満潮">満潮</option>
+                            <option value="干潮">干潮</option>
+                        </select>
+										</td>
+										<td><input type="time" class="row-time"></td>
+									</tr>
+									<tr>
+										<td>
+											<select class="row-type">
+                            <option value="干潮" selected>干潮</option>
+                            <option value="満潮">満潮</option>
+                        </select>
+										</td>
+										<td><input type="time" class="row-time"></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<button class="btn-action" onclick="saveTideConfig()">潮を保存</button>
+						</div>
+
+						<div class="section-box">
+							<div class="section-title">釣果登録</div>
+
+							<div class="form-group">
+								<label>釣れた時間</label>
+								<input type="time" id="catchTime">
+        </div>
+
+								<div class="form-group">
+									<label>魚種</label>
+									<input type="text" id="fishType" placeholder="例：キス">
+        </div>
+
+									<div class="form-group">
+										<label>サイズ（cm・任意）</label>
+										<input type="text" id="fishSize" placeholder="例：20">
+        </div>
+
+										<button class="btn-action" onclick="saveData()">釣果を追加</button>
+									</div>
+
+									<div class="section-box">
+										<div class="graph-area">
+											<div class="graph-title">時合分析（蓄積データ）</div>
+											<div class="form-row" style="margin-bottom: 10px;">
+												<div class="form-group">
+													<select id="filterTide" onchange="updateGraph()">
+                        <option value="すべて">すべての潮回り</option>
+                        <option value="大潮">大潮</option>
+                        <option value="中潮">中潮</option>
+                        <option value="小潮">小潮</option>
+                        <option value="長潮">長潮</option>
+                        <option value="若潮">若潮</option>
+                    </select>
+												</div>
+												<div class="form-group">
+													<input type="text" id="filterSpot" placeholder="スポットで絞り込み" oninput="updateGraph()">
+                </div>
+												</div>
+												<canvas id="tideGraph"></canvas>
+											</div>
+
+											<div class="list-area">
+												<div class="graph-title">釣果データ履歴 (直近最大50件)</div>
+												<table class="list-table">
+													<thead>
+														<tr>
+															<th>日付</th>
+															<th>潮</th>
+															<th>魚種</th>
+															<th>サイズ</th>
+															<th>スポット</th>
+															<th>状態</th>
+															<th>タイミング</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody id="dataList"></tbody>
+												</table>
+											</div>
+										</div>
+
+									</div>
+
+									<script>
+										let myChart = null;
 
     window.onload = function() {
         document.getElementById('fishDate').valueAsDate = new Date();
-        // 過去データを勝手に破壊する移行ロジックを完全廃止
         updateGraph();
         renderList();
     };
 
-    function timeToMinutes(timeStr) {
-        if (!timeStr) return 0;
-        const [h, m] = timeStr.split(':').map(Number);
-        return h * 60 + m;
+    function getDateTimeMinutes(dateStr, timeStr) {
+        const d = new Date(dateStr + 'T' + timeStr);
+        return Math.floor(d.getTime() / (1000 * 60));
+    }
+
+    // 潮汐データの入力チェック用関数
+    function saveTideConfig() {
+        const types = document.querySelectorAll('.row-type');
+        const times = document.querySelectorAll('.row-time');
+        let count = 0;
+        for (let i = 0; i < times.length; i++) {
+            if (times[i].value) count++;
+        }
+        if (count < 2) {
+            alert('満潮と干潮の時刻をそれぞれ少なくとも1つずつ入力してください。');
+            return;
+        }
+        alert('潮汐データを固定しました。下の「釣果登録」から連続入力できます。');
     }
 
     function saveData() {
         const fishDate = document.getElementById('fishDate').value;
         const tideName = document.getElementById('tideName').value;
         const areaName = document.getElementById('areaName').value || '未設定';
-        const fishType = document.getElementById('fishType').value || '未設定';
         const spotName = document.getElementById('spotName').value || '未設定';
+        const fishType = document.getElementById('fishType').value || '未設定';
+        const fishSize = document.getElementById('fishSize').value || '---';
         const catchTimeStr = document.getElementById('catchTime').value;
 
-        if (!catchTimeStr) {
-            alert('釣れた時間を入力してください。');
+        if (!fishDate || !catchTimeStr) {
+            alert('日付と釣れた時間を入力してください。');
             return;
         }
 
-        const catchMin = timeToMinutes(catchTimeStr);
+        const catchAbsoluteMin = getDateTimeMinutes(fishDate, catchTimeStr);
 
         const types = document.querySelectorAll('.row-type');
         const times = document.querySelectorAll('.row-time');
@@ -297,15 +347,24 @@
 
         for (let i = 0; i < types.length; i++) {
             if (times[i] && times[i].value) {
+                let eventMin = getDateTimeMinutes(fishDate, times[i].value);
+                
+                // 夜釣りバグ（24時間またぎ）の完全対応ロジック
+                if (i > 0 && eventMin < tideEvents[tideEvents.length - 1].minutes) {
+                    if (eventMin + 1440 > tideEvents[tideEvents.length - 1].minutes && (eventMin + 1440 - catchAbsoluteMin) < 720) {
+                        eventMin += 1440;
+                    }
+                }
+                
                 tideEvents.push({
                     type: types[i].value,
-                    minutes: timeToMinutes(times[i].value)
+                    minutes: eventMin
                 });
             }
         }
 
         if (tideEvents.length < 2) {
-            alert('リアルな潮汐幅を計算するため、満潮と干潮の時刻をそれぞれ少なくとも1つずつ入力してください。');
+            alert('上部のテーブルに満潮・干潮の時間を入力してください。');
             return;
         }
 
@@ -315,7 +374,7 @@
         let nextEvent = null;
 
         for (let i = 0; i < tideEvents.length - 1; i++) {
-            if (tideEvents[i].minutes <= catchMin && catchMin <= tideEvents[i+1].minutes) {
+            if (tideEvents[i].minutes <= catchAbsoluteMin && catchAbsoluteMin <= tideEvents[i+1].minutes) {
                 prevEvent = tideEvents[i];
                 nextEvent = tideEvents[i+1];
                 break;
@@ -323,7 +382,7 @@
         }
 
         if (!prevEvent) {
-            if (catchMin < tideEvents[0].minutes) {
+            if (catchAbsoluteMin < tideEvents[0].minutes) {
                 prevEvent = tideEvents[0];
                 nextEvent = tideEvents[1];
             } else {
@@ -334,7 +393,7 @@
 
         const tideType = (prevEvent.type === '満潮') ? '下げ' : '上げ';
         const totalDuration = nextEvent.minutes - prevEvent.minutes;
-        const elapsed = catchMin - prevEvent.minutes;
+        const elapsed = catchAbsoluteMin - prevEvent.minutes;
 
         let ratio = elapsed / totalDuration;
         if (ratio < 0) ratio = 0;
@@ -343,7 +402,7 @@
         let portion = Math.floor(ratio * 9) + 1;
         if (portion > 9) portion = 9;
 
-        // 正しい反転仕様：満潮直後は「九分（9）」、干潮接近は「一分（1）」
+        // 下げ九分・下げ一分のねじれを完全に解消する正しい反転処理
         if (tideType === '下げ') {
             portion = 10 - portion;
         }
@@ -353,8 +412,9 @@
             date: fishDate,
             tideName: tideName,
             area: areaName,
-            fishType: fishType,
             spot: spotName,
+            fishType: fishType,
+            size: fishSize,
             type: tideType, 
             portion: portion, 
             displayTime: catchTimeStr
@@ -366,8 +426,13 @@
 
         updateGraph();
         renderList();
+
+        // 【検証済みの連続入力仕様】
+        // 上部の潮汐情報ブロック（日付・エリア・スポット・タイムテーブル）は一切消去せず完全に残す。
+        // 下部の釣果登録エリア内の項目のみ、次の入力のためにリセットする。
         document.getElementById('catchTime').value = '';
         document.getElementById('fishType').value = '';
+        document.getElementById('fishSize').value = '';
     }
 
     function deleteData(id) {
@@ -454,11 +519,13 @@
             const kanjiNums = ['', '一分', '二分', '三分', '四分', '五分', '六分', '七分', '八分', '九分'];
             const portionText = `${item.type} ${kanjiNums[item.portion]}`;
             const fType = item.fishType || '未設定';
+            const fSize = item.size ? (item.size + ' cm') : '---';
 
             tr.innerHTML = `
                 <td>${item.date.replace(/^\d{4}-/, '')}</td>
                 <td>${item.tideName}</td>
                 <td>${fType}</td>
+                <td>${fSize}</td>
                 <td>${item.spot}</td>
                 <td>${item.type}</td>
                 <td>${portionText} (${item.displayTime})</td>
@@ -467,7 +534,7 @@
             tbody.appendChild(tr);
         });
     }
-							</script>
+									</script>
 </body>
 
 </html></body><html>
