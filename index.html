@@ -481,7 +481,7 @@
 
 					</div>
 
-					<canvas id="graphCanvas" width="800" height="420"></canvas>
+					<canvas id="graphCanvas" width="900" height="520"></canvas>
 
 					<div class="small" style="
         margin-top:10px;
@@ -499,47 +499,6 @@
 ＝ 同じ潮位付近
 
 </div>
-
-					</div>
-
-					<!-- ========================= -->
-					<!-- バックアップ -->
-					<!-- ========================= -->
-
-					<div class="card">
-
-						<h2>データバックアップ</h2>
-
-						<button onclick="exportData()">
-
-データを書き出す
-
-</button>
-
-						<div class="small">
-
-							JSON形式で保存します
-
-						</div>
-
-						<br><br>
-
-						<input
-    type="file"
-    id="importFile"
->
-
-						<button onclick="importData()">
-
-データを復元
-
-</button>
-
-						<div class="small">
-
-							JSONバックアップを復元します
-
-						</div>
 
 					</div>
 
@@ -873,21 +832,29 @@ function calcTideLabel(prev,next,fishMin){
     const elapsed =
         targetMin - prevMin;
 
-    const progress =
+    let progress =
         elapsed / total;
+
+    if(progress < 0){
+        progress = 0;
+    }
+
+    if(progress > 1){
+        progress = 1;
+    }
 
     const weights = [1,2,3,3,2,1];
 
     let currentWeight = 0;
 
-    let phase = 0;
+    let phase = 1;
 
     for(let i=0;i<weights.length;i++){
 
         const section =
             weights[i] / 12;
 
-        if(progress < currentWeight + section){
+        if(progress <= currentWeight + section){
 
             const localRatio =
                 (progress - currentWeight)
@@ -904,35 +871,25 @@ function calcTideLabel(prev,next,fishMin){
     }
 
     let tideLevel =
-        Math.floor(phase * 10);
+        Math.round(phase * 10);
 
-    if(tideLevel < 0){
-        tideLevel = 0;
+    if(tideLevel < 1){
+        tideLevel = 1;
     }
 
-    if(tideLevel > 10){
-        tideLevel = 10;
+    if(tideLevel > 9){
+        tideLevel = 9;
     }
 
-    // 下げ
     if(prev.type === '満潮'){
 
         const remain =
             10 - tideLevel;
 
-        if(remain <= 0 || remain >= 10){
-            return '潮止まり';
-        }
-
         return `下げ${remain}分`;
     }
 
-    // 上げ
     else{
-
-        if(tideLevel <= 0 || tideLevel >= 10){
-            return '潮止まり';
-        }
 
         return `上げ${tideLevel}分`;
     }
@@ -1223,7 +1180,6 @@ function createSummary(records){
 
 // ======================
 // グラフ
-// 潮位対称モデル
 // ======================
 
 function drawGraph(){
@@ -1280,7 +1236,6 @@ function drawGraph(){
             return;
         }
 
-        // 上げ
         if(r.tide.includes('上げ')){
 
             const num =
@@ -1299,7 +1254,6 @@ function drawGraph(){
             }
         }
 
-        // 下げ
         if(r.tide.includes('下げ')){
 
             const num =
@@ -1327,31 +1281,68 @@ function drawGraph(){
     const max =
         Math.max(...allValues,1);
 
-    const startX = 80;
+    const startX = 90;
 
-    const baseY = 300;
+    const baseY = 320;
 
-    const graphHeight = 180;
+    const graphHeight = 170;
 
-    const groupWidth = 72;
+    const groupWidth = 82;
 
-    const barWidth = 20;
+    const barWidth = 22;
 
     // タイトル
     ctx.fillStyle = '#000';
 
-    ctx.font = '18px sans-serif';
+    ctx.font = '20px sans-serif';
 
     ctx.fillText(
         `${fish} 潮位帯分析`,
         20,
-        30
+        45
+    );
+
+    // 凡例
+    ctx.fillStyle = '#4c6ef5';
+
+    ctx.fillRect(
+        120,
+        60,
+        20,
+        20
+    );
+
+    ctx.fillStyle = '#000';
+
+    ctx.font = '14px sans-serif';
+
+    ctx.fillText(
+        '上げ潮（干潮→満潮）',
+        150,
+        75
+    );
+
+    ctx.fillStyle = '#f0c419';
+
+    ctx.fillRect(
+        380,
+        60,
+        20,
+        20
+    );
+
+    ctx.fillStyle = '#000';
+
+    ctx.fillText(
+        '下げ潮（満潮→干潮）',
+        410,
+        75
     );
 
     // Y軸
     ctx.beginPath();
 
-    ctx.moveTo(startX,60);
+    ctx.moveTo(startX,100);
 
     ctx.lineTo(startX,baseY);
 
@@ -1362,7 +1353,7 @@ function drawGraph(){
 
     ctx.moveTo(startX,baseY);
 
-    ctx.lineTo(760,baseY);
+    ctx.lineTo(850,baseY);
 
     ctx.stroke();
 
@@ -1377,7 +1368,7 @@ function drawGraph(){
 
         ctx.fillText(
             i,
-            50,
+            55,
             y + 5
         );
 
@@ -1387,12 +1378,12 @@ function drawGraph(){
 
         ctx.moveTo(startX,y);
 
-        ctx.lineTo(760,y);
+        ctx.lineTo(850,y);
 
         ctx.stroke();
     }
 
-    // 棒
+    // 棒グラフ
     labels.forEach((label,index)=>{
 
         const rise =
@@ -1411,7 +1402,7 @@ function drawGraph(){
 
         const x =
             startX +
-            20 +
+            25 +
             index * groupWidth;
 
         // 上げ
@@ -1428,7 +1419,7 @@ function drawGraph(){
         ctx.fillStyle = '#f0c419';
 
         ctx.fillRect(
-            x + 24,
+            x + 28,
             baseY - fallHeight,
             barWidth,
             fallHeight
@@ -1447,7 +1438,7 @@ function drawGraph(){
 
         ctx.fillText(
             fall,
-            x + 24,
+            x + 28,
             baseY - fallHeight - 5
         );
 
@@ -1455,8 +1446,8 @@ function drawGraph(){
         ctx.save();
 
         ctx.translate(
-            x + 8,
-            baseY + 18
+            x + 5,
+            baseY + 40
         );
 
         ctx.rotate(
@@ -1473,173 +1464,6 @@ function drawGraph(){
 
         ctx.restore();
     });
-
-    // 凡例
-    ctx.fillStyle = '#4c6ef5';
-
-    ctx.fillRect(
-        120,
-        15,
-        20,
-        20
-    );
-
-    ctx.fillStyle = '#000';
-
-    ctx.fillText(
-        '上げ潮（干潮→）',
-        150,
-        30
-    );
-
-    ctx.fillStyle = '#f0c419';
-
-    ctx.fillRect(
-        350,
-        15,
-        20,
-        20
-    );
-
-    ctx.fillStyle = '#000';
-
-    ctx.fillText(
-        '下げ潮（満潮→）',
-        380,
-        30
-    );
-}
-
-// ======================
-// バックアップ
-// ======================
-
-function exportData(){
-
-    const data = {
-
-        currentTide:
-            JSON.parse(
-                localStorage.getItem('currentTide')
-            ),
-
-        fishRecords:
-            JSON.parse(
-                localStorage.getItem('fishRecords')
-            ) || [],
-
-        fishNames:
-            JSON.parse(
-                localStorage.getItem('fishNames')
-            ) || [],
-
-        spots:
-            JSON.parse(
-                localStorage.getItem('spots')
-            ) || []
-    };
-
-    const blob =
-        new Blob(
-            [
-                JSON.stringify(data,null,2)
-            ],
-            {
-                type:'application/json'
-            }
-        );
-
-    const url =
-        URL.createObjectURL(blob);
-
-    const a =
-        document.createElement('a');
-
-    const today =
-        new Date()
-            .toISOString()
-            .slice(0,10);
-
-    a.href = url;
-
-    a.download =
-        `tide_backup_${today}.json`;
-
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-// ======================
-// 復元
-// ======================
-
-function importData(){
-
-    const file =
-        document.getElementById('importFile')
-        .files[0];
-
-    if(!file){
-
-        alert('ファイルを選択してください');
-
-        return;
-    }
-
-    const reader =
-        new FileReader();
-
-    reader.onload = function(e){
-
-        try{
-
-            const data =
-                JSON.parse(e.target.result);
-
-            if(data.currentTide){
-
-                localStorage.setItem(
-                    'currentTide',
-                    JSON.stringify(data.currentTide)
-                );
-            }
-
-            if(data.fishRecords){
-
-                localStorage.setItem(
-                    'fishRecords',
-                    JSON.stringify(data.fishRecords)
-                );
-            }
-
-            if(data.fishNames){
-
-                localStorage.setItem(
-                    'fishNames',
-                    JSON.stringify(data.fishNames)
-                );
-            }
-
-            if(data.spots){
-
-                localStorage.setItem(
-                    'spots',
-                    JSON.stringify(data.spots)
-                );
-            }
-
-            alert('復元しました');
-
-            location.reload();
-
-        }catch(error){
-
-            alert('復元に失敗しました');
-        }
-    };
-
-    reader.readAsText(file);
 }
 
 // ======================
