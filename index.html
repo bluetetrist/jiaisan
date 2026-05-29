@@ -4,434 +4,468 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>時合さん - 潮時合データベース</title>
+	<title>時合さん</title>
 	<style>
-		:root {
-			--primary-color: #2563eb;
-			--bg-color: #f8fafc;
-			--card-bg: #ffffff;
-			--text-color: #1e293b;
-			--border-color: #e2e8f0;
-		}
-
 		body {
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-			background-color: var(--bg-color);
-			color: var(--text-color);
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 			margin: 0;
-			padding: 16px;
-			display: flex;
-			justify-content: center;
+			padding: 10px;
+			background-color: #f5f7fa;
+			color: #333;
 		}
 
 		.container {
-			width: 100%;
 			max-width: 600px;
+			margin: 0 auto;
+			background: #fff;
+			padding: 15px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		}
 
 		h1 {
-			color: var(--primary-color);
-			font-size: 1.5rem;
-			margin-bottom: 24px;
-		}
-
-		.card {
-			background: var(--card-bg);
-			border-radius: 12px;
-			padding: 20px;
-			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-			margin-bottom: 20px;
-			border: 1px solid var(--border-color);
+			font-size: 20px;
+			margin: 0 0 15px 0;
+			color: #0056b3;
 		}
 
 		.form-group {
-			margin-bottom: 16px;
+			margin-bottom: 12px;
 		}
 
-		label {
-			display: block;
-			font-weight: 600;
-			margin-bottom: 8px;
-			font-size: 0.9rem;
-		}
-
-		input,
-		select {
-			width: 100%;
-			padding: 10px;
-			border: 1px solid var(--border-color);
-			border-radius: 6px;
-			box-sizing: border-box;
-			font-size: 1rem;
-		}
-
-		.row {
+		.form-row {
 			display: flex;
-			gap: 12px;
-			margin-bottom: 16px;
+			gap: 10px;
+			margin-bottom: 12px;
 		}
 
-		.row .form-group {
+		.form-row .form-group {
 			flex: 1;
 			margin-bottom: 0;
 		}
 
-		button {
+		label {
+			display: block;
+			font-size: 13px;
+			font-weight: bold;
+			margin-bottom: 4px;
+		}
+
+		input[type="text"],
+		input[type="date"],
+		input[type="time"],
+		select {
 			width: 100%;
-			padding: 12px;
-			background-color: var(--primary-color);
-			color: white;
-			border: none;
-			border-radius: 6px;
-			font-size: 1rem;
-			font-weight: 600;
-			cursor: pointer;
-			transition: background-color 0.2s;
+			padding: 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+			font-size: 14px;
 		}
 
-		button:hover {
-			background-color: #1d4ed8;
-		}
-
-		.graph-container {
-			position: relative;
-			margin-top: 20px;
-		}
-
-		canvas {
-			width: 100% !important;
-			height: auto !important;
-		}
-
-		.list-table {
+		table {
 			width: 100%;
 			border-collapse: collapse;
-			margin-top: 12px;
-			font-size: 0.85rem;
+			margin-bottom: 15px;
+		}
+
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 6px;
+			text-align: center;
+			font-size: 13px;
+		}
+
+		th {
+			background-color: #f9f9f9;
+		}
+
+		.btn-submit {
+			width: 100%;
+			padding: 12px;
+			background-color: #1a66ff;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			font-size: 15px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.btn-submit:hover {
+			background-color: #0052cc;
+		}
+
+		.graph-area {
+			margin-top: 25px;
+			padding-top: 15px;
+			border-top: 2px solid #eee;
+		}
+
+		.graph-title {
+			font-size: 15px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+
+		.list-area {
+			margin-top: 25px;
 		}
 
 		.list-table th,
 		.list-table td {
-			border-bottom: 1px solid var(--border-color);
-			padding: 10px 8px;
-			text-align: left;
-		}
-
-		.list-table th {
-			background-color: #f1f5f9;
-			font-weight: 600;
+			padding: 8px 4px;
+			font-size: 12px;
 		}
 
 		.delete-btn {
 			background: none;
 			border: none;
-			color: #ef4444;
+			color: #ff4d4d;
 			cursor: pointer;
-			padding: 2px 6px;
-			font-size: 0.85rem;
+			font-weight: bold;
 		}
 	</style>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+
 	<div class="container">
 		<h1>時合さん</h1>
 
-		<div class="card">
-			<div class="row">
+		<div class="form-row">
+			<div class="form-group">
+				<label>日付</label>
+				<input type="date" id="fishDate">
+        </div>
 				<div class="form-group">
-					<label>日付</label>
-					<input type="date" id="fishDate">
-                </div>
-					<div class="form-group">
-						<label>潮回り</label>
-						<select id="tideName">
-                        <option value="大潮">大潮</option>
-                        <option value="中潮">中潮</option>
-                        <option value="小潮">小潮</option>
-                        <option value="長潮">長潮</option>
-                        <option value="若潮">若潮</option>
-                    </select>
-					</div>
+					<label>潮回り</label>
+					<select id="tideName">
+                <option value="大潮">大潮</option>
+                <option value="中潮">中潮</option>
+                <option value="小潮">小潮</option>
+                <option value="長潮">長潮</option>
+                <option value="若潮">若潮</option>
+            </select>
 				</div>
+			</div>
 
-				<div class="row">
+			<div class="form-row">
+				<div class="form-group">
+					<label>エリア</label>
+					<input type="text" id="areaName" placeholder="例：須磨">
+        </div>
 					<div class="form-group">
-						<label>エリア</label>
-						<input type="text" id="areaName" placeholder="例：明石">
-                </div>
-						<div class="form-group">
-							<label>スポット</label>
-							<input type="text" id="spotName" placeholder="例：林崎漁港">
-                </div>
+						<label>スポット</label>
+						<input type="text" id="spotName" placeholder="例：千守東">
+        </div>
+					</div>
+
+					<table>
+						<thead>
+							<tr>
+								<th style="width: 40%;">種類</th>
+								<th style="width: 60%;">時間</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<select class="row-type">
+                        <option value="満潮">満潮</option>
+                        <option value="干潮">干潮</option>
+                    </select>
+								</td>
+								<td><input type="time" class="row-time"></td>
+							</tr>
+							<tr>
+								<td>
+									<select class="row-type">
+                        <option value="干潮" selected>干潮</option>
+                        <option value="満潮">満潮</option>
+                    </select>
+								</td>
+								<td><input type="time" class="row-time"></td>
+							</tr>
+							<tr>
+								<td>
+									<select class="row-type">
+                        <option value="満潮">満潮</option>
+                        <option value="干潮">干潮</option>
+                    </select>
+								</td>
+								<td><input type="time" class="row-time"></td>
+							</tr>
+							<tr>
+								<td>
+									<select class="row-type">
+                        <option value="干潮" selected>干潮</option>
+                        <option value="満潮">満潮</option>
+                    </select>
+								</td>
+								<td><input type="time" class="row-time"></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="form-group">
+						<label>ヒット時刻</label>
+						<input type="time" id="hitTime">
+    </div>
+
+						<button class="btn-submit" onclick="saveData()">釣果を記録する</button>
+
+						<div class="graph-area">
+							<div class="graph-title">時合分析（蓄積データ）</div>
+							<div class="form-row" style="margin-bottom: 10px;">
+								<div class="form-group">
+									<select id="filterTide" onchange="updateGraph()">
+                    <option value="すべて">すべての潮回り</option>
+                    <option value="大潮">大潮</option>
+                    <option value="中潮">中潮</option>
+                    <option value="小潮">小潮</option>
+                    <option value="長潮">長潮</option>
+                    <option value="若潮">若潮</option>
+                </select>
+								</div>
+								<div class="form-group">
+									<input type="text" id="filterSpot" placeholder="スポットで絞り込み" oninput="updateGraph()">
+            </div>
+								</div>
+								<canvas id="tideGraph"></canvas>
+							</div>
+
+							<div class="list-area">
+								<div class="graph-title">釣果データ履歴</div>
+								<table class="list-table">
+									<thead>
+										<tr>
+											<th>日付</th>
+											<th>潮</th>
+											<th>スポット</th>
+											<th>状態</th>
+											<th>タイミング</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="dataList"></tbody>
+								</table>
+							</div>
 						</div>
 
-						<div class="row">
-							<div class="form-group">
-								<label>潮の種類</label>
-								<select id="tideType" onchange="toggleTimeLabel()">
-                        <option value="上げ">上げ（干潮からの経過）</option>
-                        <option value="下げ">下げ（満潮からの経過）</option>
-                    </select>
-							</div>
-							<div class="form-group">
-								<label id="baseTimeLabel">基準となる干潮時刻</label>
-								<input type="time" id="baseTime">
-                </div>
-							</div>
+						<script>
+							let myChart = null;
 
-							<div class="form-group">
-								<label>ヒット時刻</label>
-								<input type="time" id="hitTime">
-            </div>
+    window.onload = function() {
+        document.getElementById('fishDate').valueAsDate = new Date();
+        updateGraph();
+        renderList();
+    };
 
-								<button onclick="saveData()">釣果を記録する</button>
-							</div>
+    function timeToMinutes(timeStr) {
+        const [h, m] = timeStr.split(':').map(Number);
+        return h * 60 + m;
+    }
 
-							<div class="card">
-								<label>時合分析（蓄積データ）</label>
-								<div class="row" style="margin-top: 10px;">
-									<div class="form-group">
-										<select id="filterTide" onchange="updateGraph()">
-                        <option value="すべて">すべての潮回り</option>
-                        <option value="大潮">大潮</option>
-                        <option value="中潮">中潮</option>
-                        <option value="小潮">小潮</option>
-                        <option value="長潮">長潮</option>
-                        <option value="若潮">若潮</option>
-                    </select>
-									</div>
-									<div class="form-group">
-										<input type="text" id="filterSpot" placeholder="スポットで絞り込み" oninput="updateGraph()">
-                </div>
-									</div>
-									<div class="graph-container">
-										<canvas id="tideGraph"></canvas>
-									</div>
-								</div>
+    function saveData() {
+        const fishDate = document.getElementById('fishDate').value;
+        const tideName = document.getElementById('tideName').value;
+        const areaName = document.getElementById('areaName').value || '未設定';
+        const spotName = document.getElementById('spotName').value || '未設定';
+        const hitTimeStr = document.getElementById('hitTime').value;
 
-								<div class="card">
-									<label>釣果データ履歴</label>
-									<div style="overflow-x: auto;">
-										<table class="list-table">
-											<thead>
-												<tr>
-													<th>日付</th>
-													<th>潮</th>
-													<th>スポット</th>
-													<th>状態</th>
-													<th>タイミング</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody id="dataList">
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
+        if (!hitTimeStr) {
+            alert('ヒット時刻を入力してください。');
+            return;
+        }
 
-							<script>
-								let myChart = null;
+        const hitMin = timeToMinutes(hitTimeStr);
 
-        // ページ読み込み時の初期設定
-        window.onload = function() {
-            document.getElementById('fishDate').valueAsDate = new Date();
-            toggleTimeLabel();
-            updateGraph();
-            renderList();
+        const types = document.querySelectorAll('.row-type');
+        const times = document.querySelectorAll('.row-time');
+        let tideEvents = [];
+
+        for (let i = 0; i < types.length; i++) {
+            if (times[i].value) {
+                tideEvents.push({
+                    type: types[i].value,
+                    minutes: timeToMinutes(times[i].value)
+                });
+            }
+        }
+
+        if (tideEvents.length < 2) {
+            alert('リアルな潮汐幅を計算するため、満潮と干潮の時刻をそれぞれ少なくとも1つずつ（計2箇所以上）入力してください。');
+            return;
+        }
+
+        // 時間順にソート
+        tideEvents.sort((a, b) => a.minutes - b.minutes);
+
+        // ヒット時刻が挟まれている「前のイベント」と「次のイベント」を特定する
+        let prevEvent = null;
+        let nextEvent = null;
+
+        for (let i = 0; i < tideEvents.length - 1; i++) {
+            if (tideEvents[i].minutes <= hitMin && hitMin <= tideEvents[i+1].minutes) {
+                prevEvent = tideEvents[i];
+                nextEvent = tideEvents[i+1];
+                break;
+            }
+        }
+
+        // 万が一挟まれていない（入力された時間外の）場合のセーフティ
+        if (!prevEvent) {
+            if (hitMin < tideEvents[0].minutes) {
+                prevEvent = tideEvents[0];
+                nextEvent = tideEvents[1];
+            } else {
+                prevEvent = tideEvents[tideEvents.length - 2];
+                nextEvent = tideEvents[tideEvents.length - 1];
+            }
+        }
+
+        // 状態判定：直前のイベントが「満潮」なら、そこから引いているので「下げ潮」
+        const tideType = (prevEvent.type === '満潮') ? '下げ' : '上げ';
+
+        // 満潮〜干潮（または干潮〜満潮）のリアルな総時間幅
+        const totalDuration = nextEvent.minutes - prevEvent.minutes;
+        // 直前イベントからの経過時間
+        const elapsed = hitMin - prevEvent.minutes;
+
+        // 位置の比率（0.0 〜 1.0）
+        let ratio = elapsed / totalDuration;
+        if (ratio < 0) ratio = 0;
+        if (ratio > 1) ratio = 1;
+
+        // 比率を1〜9のスロットにマッピング
+        let portion = Math.floor(ratio * 9) + 1;
+        if (portion > 9) portion = 9;
+
+        // 【思想に直結する基本設計の外科手術】
+        // 下げ潮の時：満潮直後（elapsedが小さい＝ratioが0に近い）は、潮位が一番高い「九分（9）」になるべき。
+        // 時間が経って干潮（ratioが1に近づく）につれて「一分（1）」に向かうよう、ここで10から引いて完全反転させる。
+        if (tideType === '下げ') {
+            portion = 10 - portion;
+        }
+
+        const newData = {
+            id: Date.now(),
+            date: fishDate,
+            tideName: tideName,
+            area: areaName,
+            spot: spotName,
+            type: tideType, 
+            portion: portion, // 上げ：1(一分)→9(九分)、下げ：9(九分)→1(一分)の「潮位の高さ」が直接LocalStorageに刻まれる
+            displayTime: hitTimeStr
         };
 
-        // 潮の種類によってラベルを切り替える
-        function toggleTimeLabel() {
-            const type = document.getElementById('tideType').value;
-            const label = document.getElementById('baseTimeLabel');
-            if (type === '上げ') {
-                label.innerText = '基準となる干潮時刻';
+        let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
+        currentData.push(newData);
+        localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
+
+        updateGraph();
+        renderList();
+        document.getElementById('hitTime').value = '';
+    }
+
+    function deleteData(id) {
+        if (!confirm('このデータを削除しますか？')) return;
+        let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
+        currentData = currentData.filter(item => item.id !== id);
+        localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
+        updateGraph();
+        renderList();
+    }
+
+    function updateGraph() {
+        const filterTide = document.getElementById('filterTide').value;
+        const filterSpot = document.getElementById('filterSpot').value.trim();
+        const currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
+
+        const upCounts = Array(9).fill(0);
+        const downCounts = Array(9).fill(0);
+
+        currentData.forEach(item => {
+            if (filterTide !== 'すべて' && item.tideName !== filterTide) return;
+            if (filterSpot && !item.spot.includes(filterSpot)) return;
+
+            if (item.type === '上げ') {
+                upCounts[item.portion - 1]++; // 1分=インデックス0、9分=インデックス8
             } else {
-                label.innerText = '基準となる満潮時刻';
+                // 下げ：データ自体の設計が直ったため、「9(九分)」を一番左（インデックス0）に、「1(一分)」を一番右（インデックス8）に綺麗にマッピング
+                downCounts[9 - item.portion]++; 
             }
-        }
+        });
 
-        // 時間（HH:MM）を分に変換
-        function timeToMinutes(timeStr) {
-            const [h, m] = timeStr.split(':').map(Number);
-            return h * 60 + m;
-        }
+        const ctx = document.getElementById('tideGraph').getContext('2d');
+        if (myChart) { myChart.destroy(); }
 
-        // 釣果データの保存
-        function saveData() {
-            const fishDate = document.getElementById('fishDate').value;
-            const tideName = document.getElementById('tideName').value;
-            const areaName = document.getElementById('areaName').value || '未設定';
-            const spotName = document.getElementById('spotName').value || '未設定';
-            const tideType = document.getElementById('tideType').value;
-            const baseTime = document.getElementById('baseTime').value;
-            const hitTime = document.getElementById('hitTime').value;
-
-            if (!baseTime || !hitTime) {
-                alert('基準時刻とヒット時刻を入力してください。');
-                return;
-            }
-
-            const baseMin = timeToMinutes(baseTime);
-            let hitMin = timeToMinutes(hitTime);
-
-            // 日跨ぎ処理
-            if (hitMin < baseMin) {
-                hitMin += 24 * 60;
-            }
-
-            // 基準時刻からの経過分数
-            const diffMinutes = hitMin - baseMin;
-
-            // 潮位ベースの「○分」に変換 (1分＝約20分換算として算出)
-            let portion = Math.floor(diffMinutes / 20) + 1;
-            if (portion < 1) portion = 1;
-            if (portion > 9) portion = 9;
-
-            const newData = {
-                id: Date.now(),
-                date: fishDate,
-                tideName: tideName,
-                area: areaName,
-                spot: spotName,
-                type: tideType,
-                portion: portion,
-                displayTime: hitTime
-            };
-
-            let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-            currentData.push(newData);
-            localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
-
-            // 画面更新
-            updateGraph();
-            renderList();
-
-            // ヒット時間だけクリア
-            document.getElementById('hitTime').value = '';
-        }
-
-        // データの削除
-        function deleteData(id) {
-            if (!confirm('このデータを削除しますか？')) return;
-            let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-            currentData = currentData.filter(item => item.id !== id);
-            localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
-            updateGraph();
-            renderList();
-        }
-
-        // グラフの更新
-        function updateGraph() {
-            const filterTide = document.getElementById('filterTide').value;
-            const filterSpot = document.getElementById('filterSpot').value.trim();
-            const currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-
-            // データの集計枠 (1〜9分)
-            const upCounts = Array(9).fill(0);
-            const downCounts = Array(9).fill(0);
-
-            currentData.forEach(item => {
-                // 絞り込み条件チェック
-                if (filterTide !== 'すべて' && item.tideName !== filterTide) return;
-                if (filterSpot && !item.spot.includes(filterSpot)) return;
-
-                if (item.type === '上げ') {
-                    // 上げは 1分(index 0) 〜 9分(index 8)
-                    upCounts[item.portion - 1]++;
-                } else {
-                    // 下げは 9分(index 0) 〜 1分(index 8) にマッピングするよう修正
-                    downCounts[item.portion - 1]++;
-                }
-            });
-
-            // グラフの描画
-            const ctx = document.getElementById('tideGraph').getContext('2d');
-            
-            if (myChart) {
-                myChart.destroy();
-            }
-
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    // 上げは左から「一分→九分」、下げは左から「九分→一分」に並ぶようにラベルとデータを調整
-                    labels: [
-                        '上げ一分 / 下げ九分', 
-                        '上げ二分 / 下げ八分', 
-                        '上げ三分 / 下げ七分', 
-                        '上げ四分 / 下げ六分', 
-                        '上げ五分 / 下げ五分', 
-                        '上げ六分 / 下げ四分', 
-                        '上げ七分 / 下げ三分', 
-                        '上げ八分 / 下げ二分', 
-                        '上げ九分 / 下げ一分'
-                    ],
-                    datasets: [
-                        {
-                            label: '上げ潮（干潮→）',
-                            data: upCounts,
-                            backgroundColor: 'rgba(37, 99, 235, 0.6)',
-                            borderColor: 'rgba(37, 99, 235, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: '下げ潮（満潮→）',
-                            // 下げデータは、item.portion(1分〜9分)の1が九分、9が一分を指すためそのままの配列順で対応
-                            data: downCounts,
-                            backgroundColor: 'rgba(234, 179, 8, 0.6)',
-                            borderColor: 'rgba(234, 179, 8, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { stepSize: 1 }
-                        }
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    '上げ一分 / 下げ九分', 
+                    '上げ二分 / 下げ八分', 
+                    '上げ三分 / 下げ七分', 
+                    '上げ四分 / 下げ六分', 
+                    '上げ五分 / 下げ五分', 
+                    '上げ六分 / 下げ四分', 
+                    '上げ七分 / 下げ三分', 
+                    '上げ八分 / 下げ二分', 
+                    '上げ九分 / 下げ一分'
+                ],
+                datasets: [
+                    {
+                        label: '上げ潮（干潮→）',
+                        data: upCounts,
+                        backgroundColor: 'rgba(37, 99, 235, 0.6)',
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: '下げ潮（満潮→）',
+                        data: downCounts,
+                        backgroundColor: 'rgba(234, 179, 8, 0.6)',
+                        borderColor: 'rgba(234, 179, 8, 1)',
+                        borderWidth: 1
                     }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        // 履歴リストの描画
-        function renderList() {
-            const currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-            const tbody = document.getElementById('dataList');
-            tbody.innerHTML = '';
+    function renderList() {
+        const currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
+        const tbody = document.getElementById('dataList');
+        tbody.innerHTML = '';
 
-            // 新しい順に表示
-            currentData.slice().reverse().forEach(item => {
-                const tr = document.createElement('tr');
-                
-                // リスト側の表示用文言
-                let portionText = '';
-                if (item.type === '上げ') {
-                    portionText = `上げ ${item.portion}分`;
-                } else {
-                    // 下げの時はportion値に対して実際の引き算表記に変換
-                    const downLabels = ['九分', '八分', '七分', '六分', '五分', '四分', '三分', '二分', '一分'];
-                    portionText = `下げ ${downLabels[item.portion - 1]}`;
-                }
+        currentData.slice().reverse().forEach(item => {
+            const tr = document.createElement('tr');
+            
+            const kanjiNums = ['', '一分', '二分', '三分', '四分', '五分', '六分', '七分', '八分', '九分'];
+            const portionText = `${item.type} ${kanjiNums[item.portion]}`;
 
-                tr.innerHTML = `
-                    <td>${item.date.replace(/^\d{4}-/, '')}</td>
-                    <td>${item.tideName}</td>
-                    <td>${item.spot}</td>
-                    <td>${item.type}</td>
-                    <td>${portionText} (${item.displayTime})</td>
-                    <td><button class="delete-btn" onclick="deleteData(${item.id})">削除</button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-							</script>
+            tr.innerHTML = `
+                <td>${item.date.replace(/^\d{4}-/, '')}</td>
+                <td>${item.tideName}</td>
+                <td>${item.spot}</td>
+                <td>${item.type}</td>
+                <td>${portionText} (${item.displayTime})</td>
+                <td><button class="delete-btn" onclick="deleteData(${item.id})">削除</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+						</script>
 </body>
 
 </html></body><html>
