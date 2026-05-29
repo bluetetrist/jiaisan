@@ -2,539 +2,1378 @@
 <html lang="ja">
 
 <head>
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>時合さん</title>
+
+	<title>潮時合データベース</title>
+
 	<style>
 		body {
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			background: #f4f6f9;
 			margin: 0;
-			padding: 10px;
-			background-color: #f5f7fa;
+			padding: 15px;
 			color: #333;
 		}
 
-		.container {
-			max-width: 600px;
-			margin: 0 auto;
-		}
-
-		/* 潮汐設定・釣果登録の各ブロック共通スタイル */
-		.section-box {
+		.card {
 			background: #fff;
-			padding: 15px;
-			border-radius: 8px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			border-radius: 12px;
+			padding: 20px;
 			margin-bottom: 15px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 		}
 
-		h1 {
-			font-size: 20px;
-			margin: 0 0 15px 0;
-			color: #0056b3;
+		h2 {
+			margin-top: 0;
+			color: #1a365d;
 		}
 
-		.section-title {
-			font-size: 18px;
-			font-weight: bold;
-			margin-bottom: 15px;
-			color: #1e3a8a;
-		}
-
-		.form-group {
+		.input-group {
 			margin-bottom: 12px;
-		}
-
-		.form-row {
-			display: flex;
-			gap: 10px;
-			margin-bottom: 12px;
-		}
-
-		.form-row .form-group {
-			flex: 1;
-			margin-bottom: 0;
 		}
 
 		label {
 			display: block;
 			font-size: 13px;
 			font-weight: bold;
-			margin-bottom: 4px;
+			margin-bottom: 5px;
 		}
 
-		input[type="text"],
-		input[type="date"],
-		input[type="time"],
+		input,
 		select {
 			width: 100%;
-			padding: 8px;
+			padding: 10px;
 			border: 1px solid #ccc;
-			border-radius: 4px;
+			border-radius: 6px;
 			box-sizing: border-box;
-			font-size: 14px;
+			font-size: 16px;
+		}
+
+		button {
+			width: 100%;
+			padding: 12px;
+			border: none;
+			border-radius: 6px;
+			background: #2b6cb0;
+			color: #fff;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			margin-top: 10px;
+		}
+
+		button:active {
+			background: #2c5282;
 		}
 
 		table {
 			width: 100%;
 			border-collapse: collapse;
-			margin-bottom: 15px;
+			margin-top: 10px;
 		}
 
 		th,
 		td {
 			border: 1px solid #ddd;
-			padding: 6px;
+			padding: 8px;
 			text-align: center;
-			font-size: 13px;
+			font-size: 14px;
 		}
 
 		th {
-			background-color: #f9f9f9;
+			background: #f7fafc;
 		}
 
-		/* ボタン色指定（オリジナルに合わせた青色） */
-		.btn-action {
-			width: 100%;
-			padding: 12px;
-			background-color: #3b82f6;
-			color: #fff;
-			border: none;
-			border-radius: 4px;
-			font-size: 15px;
+		.good {
+			background: #fff7e6;
 			font-weight: bold;
-			cursor: pointer;
+			color: #dd6b20;
 		}
 
-		.btn-action:hover {
-			background-color: #2563eb;
-		}
-
-		.graph-area {
+		.section-title {
 			margin-top: 25px;
-			padding-top: 15px;
-			border-top: 2px solid #eee;
-		}
-
-		.graph-title {
-			font-size: 15px;
-			font-weight: bold;
-			margin-bottom: 10px;
-		}
-
-		.list-area {
-			margin-top: 25px;
-		}
-
-		.list-table th,
-		.list-table td {
-			padding: 8px 4px;
-			font-size: 12px;
 		}
 
 		.delete-btn {
-			background: none;
-			border: none;
-			color: #ff4d4d;
-			cursor: pointer;
-			font-weight: bold;
+			background: #e53e3e;
+			padding: 6px 10px;
+			font-size: 12px;
+			margin: 0;
+		}
+
+		canvas {
+			width: 100%;
+			max-width: 100%;
+			background: #fff;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			margin-top: 15px;
+		}
+
+		.small {
+			font-size: 12px;
+			color: #666;
 		}
 	</style>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
-	<div class="container">
+	<!-- ========================= -->
+	<!-- 今日の潮 -->
+	<!-- ========================= -->
 
-		<div class="section-box">
-			<h1>時合さん</h1>
+	<div class="card">
 
-			<div class="form-row">
-				<div class="form-group">
-					<label>日付</label>
-					<input type="date" id="fishDate">
-            </div>
-					<div class="form-group">
-						<label>潮回り</label>
-						<select id="tideName">
-                    <option value="大潮">大潮</option>
-                    <option value="中潮">中潮</option>
-                    <option value="小潮">小潮</option>
-                    <option value="長潮">長潮</option>
-                    <option value="若潮">若潮</option>
-                </select>
-					</div>
+		<h2>今日の潮</h2>
+
+		<div class="input-group">
+			<label>日付</label>
+			<input type="date" id="tideDate">
+</div>
+
+			<div class="input-group">
+				<label>潮回り</label>
+				<select id="dayTideType">
+<option>大潮</option>
+<option>中潮</option>
+<option>小潮</option>
+<option>長潮</option>
+<option>若潮</option>
+</select>
+			</div>
+
+			<div class="input-group">
+				<label>エリア</label>
+				<input type="text" id="areaInput" list="areaList">
+				<datalist id="areaList"></datalist>
+			</div>
+
+			<div class="input-group">
+				<label>スポット</label>
+				<input type="text" id="spotInput" list="spotList">
+				<datalist id="spotList"></datalist>
+			</div>
+
+			<table>
+
+				<thead>
+					<tr>
+						<th>種類</th>
+						<th>時間</th>
+					</tr>
+				</thead>
+
+				<tbody id="tideTable">
+
+					<tr>
+						<td>
+							<select>
+<option value="満潮">満潮</option>
+<option value="干潮">干潮</option>
+</select>
+						</td>
+						<td><input type="time"></td>
+					</tr>
+
+					<tr>
+						<td>
+							<select>
+<option value="干潮">干潮</option>
+<option value="満潮">満潮</option>
+</select>
+						</td>
+						<td><input type="time"></td>
+					</tr>
+
+					<tr>
+						<td>
+							<select>
+<option value="満潮">満潮</option>
+<option value="干潮">干潮</option>
+</select>
+						</td>
+						<td><input type="time"></td>
+					</tr>
+
+					<tr>
+						<td>
+							<select>
+<option value="干潮">干潮</option>
+<option value="満潮">満潮</option>
+</select>
+						</td>
+						<td><input type="time"></td>
+					</tr>
+
+				</tbody>
+
+			</table>
+
+			<button onclick="saveTideDay()">
+潮を保存
+</button>
+
+		</div>
+
+		<!-- ========================= -->
+		<!-- 釣果登録 -->
+		<!-- ========================= -->
+
+		<div class="card">
+
+			<h2>釣果登録</h2>
+
+			<div class="input-group">
+				<label>釣れた時間</label>
+				<input type="time" id="fishTime">
+</div>
+
+				<div class="input-group">
+					<label>魚種</label>
+					<input type="text" id="fishName" list="fishList">
+					<datalist id="fishList"></datalist>
 				</div>
 
-				<div class="form-row">
-					<div class="form-group">
-						<label>エリア</label>
-						<input type="text" id="areaName" placeholder="例：須磨">
-            </div>
-						<div class="form-group">
-							<label>スポット</label>
-							<input type="text" id="spotName" placeholder="例：千守東">
-            </div>
-							<div class="form-group">
-								<label>魚種</label>
-								<input type="text" id="tideFishType" placeholder="例：キス">
-            </div>
-							</div>
+				<div class="input-group">
+					<label>サイズ（cm・任意）</label>
+					<input type="number" id="fishSize">
+</div>
 
-							<table>
-								<thead>
-									<tr>
-										<th style="width: 40%;">種類</th>
-										<th style="width: 60%;">時間</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<select class="row-type">
-                            <option value="満潮">満潮</option>
-                            <option value="干潮">干潮</option>
-                        </select>
-										</td>
-										<td><input type="time" class="row-time"></td>
-									</tr>
-									<tr>
-										<td>
-											<select class="row-type">
-                            <option value="干潮" selected>干潮</option>
-                            <option value="満潮">満潮</option>
-                        </select>
-										</td>
-										<td><input type="time" class="row-time"></td>
-									</tr>
-									<tr>
-										<td>
-											<select class="row-type">
-                            <option value="満潮">満潮</option>
-                            <option value="干潮">干潮</option>
-                        </select>
-										</td>
-										<td><input type="time" class="row-time"></td>
-									</tr>
-									<tr>
-										<td>
-											<select class="row-type">
-                            <option value="干潮" selected>干潮</option>
-                            <option value="満潮">満潮</option>
-                        </select>
-										</td>
-										<td><input type="time" class="row-time"></td>
-									</tr>
-								</tbody>
-							</table>
+					<button onclick="saveFish()">
+釣果を追加
+</button>
 
-							<button class="btn-action" onclick="saveTideConfig()">潮を保存</button>
-						</div>
+				</div>
 
-						<div class="section-box">
-							<div class="section-title">釣果登録</div>
+				<!-- ========================= -->
+				<!-- 釣果一覧 -->
+				<!-- ========================= -->
 
-							<div class="form-group">
-								<label>釣れた時間</label>
-								<input type="time" id="catchTime">
-        </div>
+				<div class="card">
 
-								<div class="form-group">
-									<label>魚種</label>
-									<input type="text" id="fishType" placeholder="例：キス">
-        </div>
+					<h2>釣果一覧（最新50件）</h2>
 
-									<div class="form-group">
-										<label>サイズ（cm・任意）</label>
-										<input type="text" id="fishSize" placeholder="例：20">
-        </div>
+					<table>
 
-										<button class="btn-action" onclick="saveData()">釣果を追加</button>
-									</div>
+						<thead>
+							<tr>
+								<th>時間</th>
+								<th>魚</th>
+								<th>サイズ</th>
+								<th>潮</th>
+								<th>潮回り</th>
+								<th>削除</th>
+							</tr>
+						</thead>
 
-									<div class="section-box">
-										<div class="graph-area">
-											<div class="graph-title">時合分析（蓄積データ）</div>
-											<div class="form-row" style="margin-bottom: 10px;">
-												<div class="form-group">
-													<select id="filterTide" onchange="updateGraph()">
-                        <option value="すべて">すべての潮回り</option>
-                        <option value="大潮">大潮</option>
-                        <option value="中潮">中潮</option>
-                        <option value="小潮">小潮</option>
-                        <option value="長潮">長潮</option>
-                        <option value="若潮">若潮</option>
-                    </select>
-												</div>
-												<div class="form-group">
-													<input type="text" id="filterSpot" placeholder="スポットで絞り込み" oninput="updateGraph()">
-                </div>
-												</div>
-												<canvas id="tideGraph"></canvas>
-											</div>
+						<tbody id="fishBody">
+						</tbody>
 
-											<div class="list-area">
-												<div class="graph-title">釣果データ履歴 (直近最大50件)</div>
-												<table class="list-table">
-													<thead>
-														<tr>
-															<th>日付</th>
-															<th>潮</th>
-															<th>魚種</th>
-															<th>サイズ</th>
-															<th>スポット</th>
-															<th>状態</th>
-															<th>タイミング</th>
-															<th></th>
-														</tr>
-													</thead>
-													<tbody id="dataList"></tbody>
-												</table>
-											</div>
-										</div>
+					</table>
 
-									</div>
+				</div>
 
-									<script>
-										let myChart = null;
+				<!-- ========================= -->
+				<!-- 集計 -->
+				<!-- ========================= -->
 
-    window.onload = function() {
-        document.getElementById('fishDate').valueAsDate = new Date();
-        updateGraph();
-        renderList();
-    };
+				<div class="card">
 
-    function getDateTimeMinutes(dateStr, timeStr) {
-        const d = new Date(dateStr + 'T' + timeStr);
-        return Math.floor(d.getTime() / (1000 * 60));
+					<h2>魚種別 時合集計</h2>
+
+					<div id="summaryArea">
+					</div>
+
+				</div>
+
+				<!-- ========================= -->
+				<!-- グラフ -->
+				<!-- ========================= -->
+
+				<div class="card">
+
+					<h2>魚種別グラフ</h2>
+
+					<div class="input-group">
+
+						<label>魚種</label>
+
+						<select
+    id="graphFish"
+    onchange="drawGraph()"
+>
+    <option value="">
+        選択してください
+    </option>
+</select>
+
+					</div>
+
+					<canvas id="graphCanvas" width="700" height="320"></canvas>
+
+					<div class="small">
+						青：上げ　
+						オレンジ：下げ　
+						横軸：潮位
+					</div>
+
+				</div>
+
+				<!-- ========================= -->
+				<!-- バックアップ -->
+				<!-- ========================= -->
+
+				<div class="card">
+
+					<h2>データバックアップ</h2>
+
+					<button onclick="exportData()">
+データを書き出す
+</button>
+
+					<div class="small">
+						JSON形式でバックアップ保存します
+					</div>
+
+					<br><br>
+
+					<input type="file" id="importFile">
+
+					<button onclick="importData()">
+データを復元
+</button>
+
+					<div class="small">
+						以前書き出したJSONを復元します
+					</div>
+
+				</div>
+
+				<script>
+					// ======================
+// 時間変換
+// ======================
+
+function timeToMin(timeStr){
+
+    if(!timeStr){
+        return 0;
     }
 
-    // 潮汐データの入力チェック用関数
-    function saveTideConfig() {
-        const types = document.querySelectorAll('.row-type');
-        const times = document.querySelectorAll('.row-time');
-        let count = 0;
-        for (let i = 0; i < times.length; i++) {
-            if (times[i].value) count++;
-        }
-        if (count < 2) {
-            alert('満潮と干潮の時刻をそれぞれ少なくとも1つずつ入力してください。');
-            return;
-        }
-        alert('潮汐データを固定しました。下の「釣果登録」から連続入力できます。');
+    const [h,m] =
+        timeStr.split(':').map(Number);
+
+    return h * 60 + m;
+}
+
+// ======================
+// スポット保存
+// ======================
+
+function saveSpot(area,spot){
+
+    let spots =
+        JSON.parse(localStorage.getItem('spots')) || [];
+
+    const exists =
+        spots.find(
+            s =>
+                s.area === area &&
+                s.spot === spot
+        );
+
+    if(!exists){
+
+        spots.push({ area, spot });
+
+        localStorage.setItem(
+            'spots',
+            JSON.stringify(spots)
+        );
     }
 
-    function saveData() {
-        const fishDate = document.getElementById('fishDate').value;
-        const tideName = document.getElementById('tideName').value;
-        const areaName = document.getElementById('areaName').value || '未設定';
-        const spotName = document.getElementById('spotName').value || '未設定';
-        const fishType = document.getElementById('fishType').value || '未設定';
-        const fishSize = document.getElementById('fishSize').value || '---';
-        const catchTimeStr = document.getElementById('catchTime').value;
+    loadSpotList();
+}
 
-        if (!fishDate || !catchTimeStr) {
-            alert('日付と釣れた時間を入力してください。');
-            return;
-        }
+// ======================
+// スポット読込
+// ======================
 
-        const catchAbsoluteMin = getDateTimeMinutes(fishDate, catchTimeStr);
+function loadSpotList(){
 
-        const types = document.querySelectorAll('.row-type');
-        const times = document.querySelectorAll('.row-time');
-        let tideEvents = [];
+    const areaList =
+        document.getElementById('areaList');
 
-        for (let i = 0; i < types.length; i++) {
-            if (times[i] && times[i].value) {
-                let eventMin = getDateTimeMinutes(fishDate, times[i].value);
-                
-                // 夜釣りバグ（24時間またぎ）の完全対応ロジック
-                if (i > 0 && eventMin < tideEvents[tideEvents.length - 1].minutes) {
-                    if (eventMin + 1440 > tideEvents[tideEvents.length - 1].minutes && (eventMin + 1440 - catchAbsoluteMin) < 720) {
-                        eventMin += 1440;
-                    }
-                }
-                
-                tideEvents.push({
-                    type: types[i].value,
-                    minutes: eventMin
-                });
-            }
-        }
+    const spotList =
+        document.getElementById('spotList');
 
-        if (tideEvents.length < 2) {
-            alert('上部のテーブルに満潮・干潮の時間を入力してください。');
-            return;
-        }
+    areaList.innerHTML = '';
+    spotList.innerHTML = '';
 
-        tideEvents.sort((a, b) => a.minutes - b.minutes);
+    const spots =
+        JSON.parse(localStorage.getItem('spots')) || [];
 
-        let prevEvent = null;
-        let nextEvent = null;
+    const areas =
+        [...new Set(spots.map(s => s.area))];
 
-        for (let i = 0; i < tideEvents.length - 1; i++) {
-            if (tideEvents[i].minutes <= catchAbsoluteMin && catchAbsoluteMin <= tideEvents[i+1].minutes) {
-                prevEvent = tideEvents[i];
-                nextEvent = tideEvents[i+1];
-                break;
-            }
-        }
+    areas.forEach(a => {
 
-        if (!prevEvent) {
-            if (catchAbsoluteMin < tideEvents[0].minutes) {
-                prevEvent = tideEvents[0];
-                nextEvent = tideEvents[1];
-            } else {
-                prevEvent = tideEvents[tideEvents.length - 2];
-                nextEvent = tideEvents[tideEvents.length - 1];
-            }
-        }
+        const option =
+            document.createElement('option');
 
-        const tideType = (prevEvent.type === '満潮') ? '下げ' : '上げ';
-        const totalDuration = nextEvent.minutes - prevEvent.minutes;
-        const elapsed = catchAbsoluteMin - prevEvent.minutes;
+        option.value = a;
 
-        let ratio = elapsed / totalDuration;
-        if (ratio < 0) ratio = 0;
-        if (ratio > 1) ratio = 1;
+        areaList.appendChild(option);
+    });
 
-        let portion = Math.floor(ratio * 9) + 1;
-        if (portion > 9) portion = 9;
+    spots.forEach(s => {
 
-        // 下げ九分・下げ一分のねじれを完全に解消する正しい反転処理
-        if (tideType === '下げ') {
-            portion = 10 - portion;
-        }
+        const option =
+            document.createElement('option');
 
-        const newData = {
-            id: Date.now(),
-            date: fishDate,
-            tideName: tideName,
-            area: areaName,
-            spot: spotName,
-            fishType: fishType,
-            size: fishSize,
-            type: tideType, 
-            portion: portion, 
-            displayTime: catchTimeStr
-        };
+            option.value = s.spot;
 
-        let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-        currentData.push(newData);
-        localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
+        spotList.appendChild(option);
+    });
+}
 
-        updateGraph();
-        renderList();
+// ======================
+// 魚種保存
+// ======================
 
-        // 【検証済みの連続入力仕様】
-        // 上部の潮汐情報ブロック（日付・エリア・スポット・タイムテーブル）は一切消去せず完全に残す。
-        // 下部の釣果登録エリア内の項目のみ、次の入力のためにリセットする。
-        document.getElementById('catchTime').value = '';
-        document.getElementById('fishType').value = '';
-        document.getElementById('fishSize').value = '';
+function saveFishName(name){
+
+    let fishes =
+        JSON.parse(localStorage.getItem('fishNames')) || [];
+
+    if(!fishes.includes(name)){
+
+        fishes.push(name);
+
+        localStorage.setItem(
+            'fishNames',
+            JSON.stringify(fishes)
+        );
     }
 
-    function deleteData(id) {
-        if (!confirm('このデータを削除しますか？')) return;
-        let currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-        currentData = currentData.filter(item => item.id !== id);
-        localStorage.setItem('jiaisan_data', JSON.stringify(currentData));
-        updateGraph();
-        renderList();
+    loadFishList();
+    loadGraphFishList();
+}
+
+// ======================
+// 魚種読込
+// ======================
+
+function loadFishList(){
+
+    const fishList =
+        document.getElementById('fishList');
+
+    fishList.innerHTML = '';
+
+    const fishes =
+        JSON.parse(localStorage.getItem('fishNames')) || [];
+
+    fishes.forEach(f => {
+
+        const option =
+            document.createElement('option');
+
+        option.value = f;
+
+        fishList.appendChild(option);
+    });
+}
+
+// ======================
+// グラフ魚種
+// ======================
+
+function loadGraphFishList(){
+
+    const select =
+        document.getElementById('graphFish');
+
+    const currentValue =
+        select.value;
+
+    select.innerHTML =
+        '<option value="">選択してください</option>';
+
+    const fishes =
+        JSON.parse(localStorage.getItem('fishNames')) || [];
+
+    fishes.forEach(f => {
+
+        const option =
+            document.createElement('option');
+
+        option.value = f;
+        option.textContent = f;
+
+        select.appendChild(option);
+    });
+
+    select.value = currentValue;
+}
+
+// ======================
+// 潮保存
+// ======================
+
+function saveTideDay(){
+
+    const date =
+        document.getElementById('tideDate').value;
+
+    const tideType =
+        document.getElementById('dayTideType').value;
+
+    const area =
+        document.getElementById('areaInput').value;
+
+    const spot =
+        document.getElementById('spotInput').value;
+
+    if(!date || !area || !spot){
+
+        alert('入力してください');
+
+        return;
     }
 
-    function updateGraph() {
-        const filterTide = document.getElementById('filterTide').value;
-        const filterSpot = document.getElementById('filterSpot').value.trim();
-        const currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
+    saveSpot(area,spot);
 
-        const upCounts = Array(9).fill(0);
-        const downCounts = Array(9).fill(0);
+    const rows =
+        document.querySelectorAll('#tideTable tr');
 
-        currentData.forEach(item => {
-            if (filterTide !== 'すべて' && item.tideName !== filterTide) return;
-            if (filterSpot && !item.spot.includes(filterSpot)) return;
+    const tides = [];
 
-            if (item.type === '上げ') {
-                upCounts[item.portion - 1]++;
-            } else {
-                downCounts[9 - item.portion]++; 
-            }
-        });
+    rows.forEach(row => {
 
-        const ctx = document.getElementById('tideGraph').getContext('2d');
-        if (myChart) { myChart.destroy(); }
+        const type =
+            row.querySelector('select').value;
 
-        myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    '上げ一分 / 下げ九分', 
-                    '上げ二分 / 下げ八分', 
-                    '上げ三分 / 下げ七分', 
-                    '上げ四分 / 下げ六分', 
-                    '上げ五分 / 下げ五分', 
-                    '上げ六分 / 下げ四分', 
-                    '上げ七分 / 下げ三分', 
-                    '上げ八分 / 下げ二分', 
-                    '上げ九分 / 下げ一分'
-                ],
-                datasets: [
-                    {
-                        label: '上げ潮（干潮→）',
-                        data: upCounts,
-                        backgroundColor: 'rgba(37, 99, 235, 0.6)',
-                        borderColor: 'rgba(37, 99, 235, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: '下げ潮（満潮→）',
-                        data: downCounts,
-                        backgroundColor: 'rgba(234, 179, 8, 0.6)',
-                        borderColor: 'rgba(234, 179, 8, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
-                }
-            }
-        });
+        const time =
+            row.querySelector('input').value;
+
+        if(time){
+
+            tides.push({
+                type,
+                time
+            });
+        }
+    });
+
+    tides.sort(
+        (a,b)=>
+            timeToMin(a.time)
+            - timeToMin(b.time)
+    );
+
+    localStorage.setItem(
+        'currentTide',
+        JSON.stringify({
+            date,
+            tideType,
+            area,
+            spot,
+            tides
+        })
+    );
+
+    alert('潮を保存しました');
+}
+
+// ======================
+// 潮復元
+// ======================
+
+function restoreCurrentTide(){
+
+    const current =
+        JSON.parse(
+            localStorage.getItem('currentTide')
+        );
+
+    if(!current){
+        return;
     }
 
-    function renderList() {
-        const currentData = JSON.parse(localStorage.getItem('jiaisan_data')) || [];
-        const tbody = document.getElementById('dataList');
-        tbody.innerHTML = '';
+    document.getElementById('tideDate').value =
+        current.date;
 
-        const displayData = currentData.slice().reverse().slice(0, 50);
+    document.getElementById('dayTideType').value =
+        current.tideType || '中潮';
 
-        displayData.forEach(item => {
-            const tr = document.createElement('tr');
-            
-            const kanjiNums = ['', '一分', '二分', '三分', '四分', '五分', '六分', '七分', '八分', '九分'];
-            const portionText = `${item.type} ${kanjiNums[item.portion]}`;
-            const fType = item.fishType || '未設定';
-            const fSize = item.size ? (item.size + ' cm') : '---';
+    document.getElementById('areaInput').value =
+        current.area;
+
+    document.getElementById('spotInput').value =
+        current.spot;
+
+    const rows =
+        document.querySelectorAll('#tideTable tr');
+
+    rows.forEach(row => {
+        row.querySelector('input').value = '';
+    });
+
+    current.tides.forEach((tide,index)=>{
+
+        if(rows[index]){
+
+            rows[index]
+                .querySelector('select')
+                .value = tide.type;
+
+            rows[index]
+                .querySelector('input')
+                .value = tide.time;
+        }
+    });
+}
+
+// ======================
+// 12分率
+// ======================
+
+function calcTideLabel(prev,next,fishMin){
+
+    let prevMin =
+        timeToMin(prev.time);
+
+    let nextMin =
+        timeToMin(next.time);
+
+    if(nextMin < prevMin){
+        nextMin += 1440;
+    }
+
+    let targetMin = fishMin;
+
+    if(targetMin < prevMin){
+        targetMin += 1440;
+    }
+
+    const total =
+        nextMin - prevMin;
+
+    const elapsed =
+        targetMin - prevMin;
+
+    const progress =
+        elapsed / total;
+
+    const weights = [1,2,3,3,2,1];
+
+    let currentWeight = 0;
+    let phase = 0;
+
+    for(let i=0;i<weights.length;i++){
+
+        const section =
+            weights[i] / 12;
+
+        if(progress < currentWeight + section){
+
+            const localRatio =
+                (progress - currentWeight)
+                / section;
+
+            phase =
+                (i + localRatio)
+                / 6;
+
+            break;
+        }
+
+        currentWeight += section;
+    }
+
+    let tideLevel =
+        Math.floor(phase * 10);
+
+    if(tideLevel < 0){
+        tideLevel = 0;
+    }
+
+    if(tideLevel > 10){
+        tideLevel = 10;
+    }
+
+    if(prev.type === '満潮'){
+
+        const remain =
+            10 - tideLevel;
+
+        if(remain <= 0 || remain >= 10){
+            return '潮止まり';
+        }
+
+        return `下げ${remain}分`;
+    }
+
+    else{
+
+        if(tideLevel <= 0 || tideLevel >= 10){
+            return '潮止まり';
+        }
+
+        return `上げ${tideLevel}分`;
+    }
+}
+
+// ======================
+// 釣果保存
+// ======================
+
+function saveFish(){
+
+    const current =
+        JSON.parse(
+            localStorage.getItem('currentTide')
+        );
+
+    if(
+        !current ||
+        !current.tides ||
+        current.tides.length < 2
+    ){
+        alert('先に潮を登録してください');
+        return;
+    }
+
+    const fishTime =
+        document.getElementById('fishTime').value;
+
+    const fishName =
+        document.getElementById('fishName').value;
+
+    const fishSize =
+        document.getElementById('fishSize').value;
+
+    if(!fishTime || !fishName){
+
+        alert('入力してください');
+
+        return;
+    }
+
+    saveFishName(fishName);
+
+    const fishMin =
+        timeToMin(fishTime);
+
+    const tides =
+        [...current.tides].sort(
+            (a,b)=>
+                timeToMin(a.time)
+                - timeToMin(b.time)
+        );
+
+    let tideLabel = '判定不可';
+
+    for(let i=0;i<tides.length-1;i++){
+
+        let start =
+            timeToMin(tides[i].time);
+
+        let end =
+            timeToMin(tides[i+1].time);
+
+        let target = fishMin;
+
+        if(end < start){
+            end += 1440;
+        }
+
+        if(target < start){
+            target += 1440;
+        }
+
+        if(
+            target >= start &&
+            target <= end
+        ){
+
+            tideLabel =
+                calcTideLabel(
+                    tides[i],
+                    tides[i+1],
+                    fishMin
+                );
+
+            break;
+        }
+    }
+
+    let records =
+        JSON.parse(
+            localStorage.getItem('fishRecords')
+        ) || [];
+
+    records.push({
+
+        date: current.date,
+        tideType: current.tideType,
+
+        area: current.area,
+        spot: current.spot,
+
+        fish: fishName,
+        size: fishSize,
+
+        time: fishTime,
+        tide: tideLabel
+    });
+
+    localStorage.setItem(
+        'fishRecords',
+        JSON.stringify(records)
+    );
+
+    loadFish();
+    drawGraph();
+
+    document.getElementById('fishTime').value = '';
+    document.getElementById('fishSize').value = '';
+}
+
+// ======================
+// 削除
+// ======================
+
+function deleteFish(index){
+
+    if(!confirm('削除しますか？')){
+        return;
+    }
+
+    let records =
+        JSON.parse(
+            localStorage.getItem('fishRecords')
+        ) || [];
+
+    records.splice(index,1);
+
+    localStorage.setItem(
+        'fishRecords',
+        JSON.stringify(records)
+    );
+
+    loadFish();
+    drawGraph();
+}
+
+// ======================
+// 一覧
+// ======================
+
+function loadFish(){
+
+    const body =
+        document.getElementById('fishBody');
+
+    body.innerHTML = '';
+
+    const records =
+        JSON.parse(
+            localStorage.getItem('fishRecords')
+        ) || [];
+
+    [...records]
+        .reverse()
+        .slice(0,50)
+        .forEach((r,reverseIndex)=>{
+
+        const index =
+            records.length - 1 - reverseIndex;
+
+        const tr =
+            document.createElement('tr');
+
+        tr.innerHTML = `
+            <td>${r.time}</td>
+            <td>${r.fish}</td>
+            <td>${r.size || '-'}</td>
+            <td>${r.tide}</td>
+            <td>${r.tideType || '-'}</td>
+            <td>
+                <button
+                    class="delete-btn"
+                    onclick="deleteFish(${index})"
+                >
+                    ❌
+                </button>
+            </td>
+        `;
+
+        body.appendChild(tr);
+    });
+
+    createSummary(records);
+}
+
+// ======================
+// 集計
+// ======================
+
+function createSummary(records){
+
+    const area =
+        document.getElementById('summaryArea');
+
+    area.innerHTML = '';
+
+    const grouped = {};
+
+    records.forEach(r => {
+
+        const key =
+            `${r.area} / ${r.spot} / ${r.fish}`;
+
+        if(!grouped[key]){
+            grouped[key] = {};
+        }
+
+        if(!grouped[key][r.tide]){
+            grouped[key][r.tide] = 0;
+        }
+
+        grouped[key][r.tide]++;
+    });
+
+    for(const key in grouped){
+
+        const title =
+            document.createElement('h3');
+
+        title.className = 'section-title';
+        title.textContent = key;
+
+        area.appendChild(title);
+
+        const table =
+            document.createElement('table');
+
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>潮</th>
+                    <th>件数</th>
+                </tr>
+            </thead>
+        `;
+
+        const tbody =
+            document.createElement('tbody');
+
+        const tides =
+            grouped[key];
+
+        for(const tide in tides){
+
+            const tr =
+                document.createElement('tr');
+
+            if(
+                tide === '上げ3分' ||
+                tide === '下げ7分'
+            ){
+                tr.className = 'good';
+            }
 
             tr.innerHTML = `
-                <td>${item.date.replace(/^\d{4}-/, '')}</td>
-                <td>${item.tideName}</td>
-                <td>${fType}</td>
-                <td>${fSize}</td>
-                <td>${item.spot}</td>
-                <td>${item.type}</td>
-                <td>${portionText} (${item.displayTime})</td>
-                <td><button class="delete-btn" onclick="deleteData(${item.id})">削除</button></td>
+                <td>${tide}</td>
+                <td>${tides[tide]}</td>
             `;
+
             tbody.appendChild(tr);
-        });
+        }
+
+        table.appendChild(tbody);
+
+        area.appendChild(table);
     }
-									</script>
+}
+
+// ======================
+// グラフ
+// ======================
+
+function drawGraph(){
+
+    const fish =
+        document.getElementById('graphFish').value;
+
+    const canvas =
+        document.getElementById('graphCanvas');
+
+    const ctx =
+        canvas.getContext('2d');
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    if(!fish){
+        return;
+    }
+
+    const records =
+        JSON.parse(
+            localStorage.getItem('fishRecords')
+        ) || [];
+
+    const levels = [
+        1,2,3,4,5,6,7,8,9
+    ];
+
+    const riseCounts = {};
+    const fallCounts = {};
+
+    levels.forEach(level => {
+
+        riseCounts[level] = 0;
+        fallCounts[level] = 0;
+    });
+
+    records.forEach(r => {
+
+        if(r.fish !== fish){
+            return;
+        }
+
+        if(r.tide.includes('上げ')){
+
+            const num =
+                Number(
+                    r.tide
+                        .replace('上げ','')
+                        .replace('分','')
+                );
+
+            if(riseCounts[num] !== undefined){
+                riseCounts[num]++;
+            }
+        }
+
+        if(r.tide.includes('下げ')){
+
+            const num =
+                Number(
+                    r.tide
+                        .replace('下げ','')
+                        .replace('分','')
+                );
+
+            const level =
+                10 - num;
+
+            if(fallCounts[level] !== undefined){
+                fallCounts[level]++;
+            }
+        }
+    });
+
+    const allValues = [];
+
+    levels.forEach(level => {
+
+        allValues.push(
+            riseCounts[level]
+        );
+
+        allValues.push(
+            fallCounts[level]
+        );
+    });
+
+    const max =
+        Math.max(...allValues,1);
+
+    const startX = 60;
+    const baseY = 260;
+
+    const groupWidth = 60;
+
+    const barWidth = 18;
+
+    const graphHeight = 180;
+
+    ctx.font = '16px sans-serif';
+
+    ctx.fillStyle = '#000';
+
+    ctx.fillText(
+        `${fish} 潮位別ヒット`,
+        20,
+        25
+    );
+
+    ctx.beginPath();
+
+    ctx.moveTo(startX,40);
+
+    ctx.lineTo(startX,baseY);
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.moveTo(startX,baseY);
+
+    ctx.lineTo(650,baseY);
+
+    ctx.stroke();
+
+    levels.forEach((level,index)=>{
+
+        const rise =
+            riseCounts[level];
+
+        const fall =
+            fallCounts[level];
+
+        const riseHeight =
+            (rise / max)
+            * graphHeight;
+
+        const fallHeight =
+            (fall / max)
+            * graphHeight;
+
+        const x =
+            startX + 20 + index * groupWidth;
+
+        // 上げ
+        ctx.fillStyle = '#3182ce';
+
+        ctx.fillRect(
+            x,
+            baseY - riseHeight,
+            barWidth,
+            riseHeight
+        );
+
+        // 下げ
+        ctx.fillStyle = '#dd6b20';
+
+        ctx.fillRect(
+            x + 22,
+            baseY - fallHeight,
+            barWidth,
+            fallHeight
+        );
+
+        ctx.fillStyle = '#000';
+
+        ctx.font = '11px sans-serif';
+
+        ctx.fillText(
+            rise,
+            x,
+            baseY - riseHeight - 5
+        );
+
+        ctx.fillText(
+            fall,
+            x + 22,
+            baseY - fallHeight - 5
+        );
+
+        ctx.fillText(
+            level,
+            x + 10,
+            baseY + 20
+        );
+    });
+
+    // 凡例
+    ctx.fillStyle = '#3182ce';
+
+    ctx.fillRect(500,20,15,15);
+
+    ctx.fillStyle = '#000';
+
+    ctx.fillText(
+        '上げ',
+        520,
+        32
+    );
+
+    ctx.fillStyle = '#dd6b20';
+
+    ctx.fillRect(570,20,15,15);
+
+    ctx.fillStyle = '#000';
+
+    ctx.fillText(
+        '下げ',
+        590,
+        32
+    );
+
+    ctx.fillText(
+        '潮位',
+        20,
+        baseY + 20
+    );
+}
+
+// ======================
+// エクスポート
+// ======================
+
+function exportData(){
+
+    const data = {
+
+        currentTide:
+            JSON.parse(
+                localStorage.getItem('currentTide')
+            ),
+
+        fishRecords:
+            JSON.parse(
+                localStorage.getItem('fishRecords')
+            ) || [],
+
+        fishNames:
+            JSON.parse(
+                localStorage.getItem('fishNames')
+            ) || [],
+
+        spots:
+            JSON.parse(
+                localStorage.getItem('spots')
+            ) || []
+    };
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(data,null,2)
+            ],
+            {
+                type:'application/json'
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement('a');
+
+    const today =
+        new Date()
+            .toISOString()
+            .slice(0,10);
+
+    a.href = url;
+
+    a.download =
+        `tide_backup_${today}.json`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+// ======================
+// インポート
+// ======================
+
+function importData(){
+
+    const file =
+        document.getElementById('importFile')
+        .files[0];
+
+    if(!file){
+
+        alert('ファイルを選択してください');
+
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = function(e){
+
+        try{
+
+            const data =
+                JSON.parse(e.target.result);
+
+            if(data.currentTide){
+
+                localStorage.setItem(
+                    'currentTide',
+                    JSON.stringify(data.currentTide)
+                );
+            }
+
+            if(data.fishRecords){
+
+                localStorage.setItem(
+                    'fishRecords',
+                    JSON.stringify(data.fishRecords)
+                );
+            }
+
+            if(data.fishNames){
+
+                localStorage.setItem(
+                    'fishNames',
+                    JSON.stringify(data.fishNames)
+                );
+            }
+
+            if(data.spots){
+
+                localStorage.setItem(
+                    'spots',
+                    JSON.stringify(data.spots)
+                );
+            }
+
+            alert('復元しました');
+
+            location.reload();
+
+        }catch(error){
+
+            alert('復元に失敗しました');
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+// ======================
+// 起動時
+// ======================
+
+restoreCurrentTide();
+loadFish();
+loadSpotList();
+loadFishList();
+loadGraphFishList();
+
+				</script>
+
 </body>
 
 </html></body><html>
