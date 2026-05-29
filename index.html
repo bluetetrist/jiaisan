@@ -871,7 +871,7 @@ function calcTideLabel(prev,next,fishMin){
     }
 
     let tideLevel =
-        Math.round(phase * 10);
+        Math.floor(phase * 10);
 
     if(tideLevel < 1){
         tideLevel = 1;
