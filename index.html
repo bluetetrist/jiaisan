@@ -244,10 +244,7 @@
             drawSpotGraph();
             drawTideGraph();
         ">
-					        onchange="
-					            drawSpotGraph();
-					            drawTideGraph();
-					        ">
+					        
 <option value="">選択してください</option>
 </select>
 
@@ -714,67 +711,69 @@ return;
 // 潮回り分析
 // ======================
 
+
 function drawTideGraph(){
 
-    const canvas =
-        document.getElementById('tideCanvas');
+const spot =
+document.getElementById('graphSpot').value;
 
-    const ctx =
-        canvas.getContext('2d');
+const canvas =
+document.getElementById('tideCanvas');
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+const ctx =
+canvas.getContext('2d');
 
-    const records =
-        JSON.parse(
-            localStorage.getItem('fishRecords')
-        ) || [];
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
 
-    const labels = [
-        '大潮',
-        '中潮',
-        '小潮',
-        '長潮',
-        '若潮'
-    ];
-
-    const counts = [
-        0,0,0,0,0
-    ];
-
-	records.forEach(r=>{
-	
-	if(r.spot !== spot){
-	return;
-	}
-	
-	const index =
-	labels.indexOf(r.tideType);
-	
-	if(index >= 0){
-	
-	counts[index]++;
-	
-	}
-
-    drawBarChart(
-        ctx,
-        canvas,
-        labels,
-        counts,
-spot + '潮回り分析'
-    );
-
+if(!spot){
+return;
 }
 
-// ======================
-// 共通棒グラフ
-// ======================
+const records =
+JSON.parse(
+localStorage.getItem('fishRecords')
+) || [];
 
+const labels = [
+'大潮',
+'中潮',
+'小潮',
+'長潮',
+'若潮'
+];
+
+const counts = [
+0,0,0,0,0
+];
+
+records.forEach(r=>{
+
+if(r.spot !== spot){
+return;
+}
+
+const index =
+labels.indexOf(r.tideType);
+
+if(index >= 0){
+counts[index]++;
+}
+
+});
+
+drawBarChart(
+ctx,
+canvas,
+labels,
+counts,
+spot + ' 潮回り分析'
+);
+}
 function drawBarChart(
     ctx,
     canvas,
