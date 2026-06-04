@@ -1,278 +1,292 @@
-<!doctype html><html><head></head><body><!DOCTYPE html>
-<html lang="ja">
+<!doctype html><html><head></head><body><!doctype html>
+<html>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>時合さん Ver2</title>
-
-	<style>
-		body {
-			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-			background: #f4f6f9;
-			margin: 0;
-			padding: 15px;
-			color: #333;
-		}
-
-		.card {
-			background: #fff;
-			border-radius: 12px;
-			padding: 20px;
-			margin-bottom: 15px;
-			box-shadow: 0 4px 6px rgba(0, 0, 0, .05);
-		}
-
-		h2 {
-			margin-top: 0;
-			color: #1a365d;
-		}
-
-		.input-group {
-			margin-bottom: 12px;
-		}
-
-		label {
-			display: block;
-			margin-bottom: 5px;
-			font-size: 13px;
-			font-weight: bold;
-		}
-
-		input,
-		select {
-			width: 100%;
-			padding: 10px;
-			border: 1px solid #ccc;
-			border-radius: 6px;
-			box-sizing: border-box;
-			font-size: 16px;
-		}
-
-		button {
-			width: 100%;
-			padding: 12px;
-			border: none;
-			border-radius: 6px;
-			background: #2b6cb0;
-			color: #fff;
-			font-size: 16px;
-			font-weight: bold;
-			cursor: pointer;
-			margin-top: 10px;
-		}
-
-		button:active {
-			background: #2c5282;
-		}
-
-		.delete-btn {
-			background: #e53e3e;
-			padding: 6px 10px;
-			font-size: 12px;
-			margin: 0;
-		}
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-top: 10px;
-		}
-
-		th,
-		td {
-			border: 1px solid #ddd;
-			padding: 8px;
-			text-align: center;
-			font-size: 14px;
-		}
-
-		th {
-			background: #f7fafc;
-		}
-
-		canvas {
-			width: 100%;
-			max-width: 100%;
-			border: 1px solid #ddd;
-			border-radius: 8px;
-			background: #fff;
-			margin-top: 15px;
-		}
-	</style>
-</head>
+<head></head>
 
 <body>
+	<!DOCTYPE html>
+	<html lang="ja">
 
-	<div class="card">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<title>時合さん Ver2</title>
 
-		<h2>潮登録</h2>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+				background: #f4f6f9;
+				margin: 0;
+				padding: 15px;
+				color: #333;
+			}
 
-		<div class="input-group">
-			<label>日付</label>
-			<input type="date" id="tideDate">
+			.card {
+				background: #fff;
+				border-radius: 12px;
+				padding: 20px;
+				margin-bottom: 15px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, .05);
+			}
+
+			h2 {
+				margin-top: 0;
+				color: #1a365d;
+			}
+
+			.input-group {
+				margin-bottom: 12px;
+			}
+
+			label {
+				display: block;
+				margin-bottom: 5px;
+				font-size: 13px;
+				font-weight: bold;
+			}
+
+			input,
+			select {
+				width: 100%;
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				box-sizing: border-box;
+				font-size: 16px;
+			}
+
+			button {
+				width: 100%;
+				padding: 12px;
+				border: none;
+				border-radius: 6px;
+				background: #2b6cb0;
+				color: #fff;
+				font-size: 16px;
+				font-weight: bold;
+				cursor: pointer;
+				margin-top: 10px;
+			}
+
+			button:active {
+				background: #2c5282;
+			}
+
+			.delete-btn {
+				background: #e53e3e;
+				padding: 6px 10px;
+				font-size: 12px;
+				margin: 0;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 10px;
+			}
+
+			th,
+			td {
+				border: 1px solid #ddd;
+				padding: 8px;
+				text-align: center;
+				font-size: 14px;
+			}
+
+			th {
+				background: #f7fafc;
+			}
+
+			canvas {
+				width: 100%;
+				max-width: 100%;
+				border: 1px solid #ddd;
+				border-radius: 8px;
+				background: #fff;
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="card">
+
+			<h2>潮登録</h2>
+
+			<div class="input-group">
+				<label>日付</label>
+				<input type="date" id="tideDate">
 </div>
 
-			<div class="input-group">
-				<label>スポット</label>
-				<input type="text" id="spotInput" list="spotList">
-				<datalist id="spotList"></datalist>
-			</div>
+				<div class="input-group">
+					<label>スポット</label>
+					<input type="text" id="spotInput" list="spotList">
+					<datalist id="spotList"></datalist>
+				</div>
 
-			<div class="input-group">
-				<label>潮回り</label>
-				<select id="tideType">
+				<div class="input-group">
+					<label>潮回り</label>
+					<select id="tideType">
 <option>大潮</option>
 <option>中潮</option>
 <option>小潮</option>
 <option>長潮</option>
 <option>若潮</option>
 </select>
-			</div>
-
-			<table>
-
-				<thead>
-					<tr>
-						<th>種類</th>
-						<th>時間</th>
-					</tr>
-				</thead>
-
-				<tbody id="tideTable">
-
-					<tr>
-						<td>
-							<select>
-<option>満潮</option>
-<option>干潮</option>
-</select>
-						</td>
-						<td><input type="time"></td>
-					</tr>
-
-					<tr>
-						<td>
-							<select>
-<option>干潮</option>
-<option>満潮</option>
-</select>
-						</td>
-						<td><input type="time"></td>
-					</tr>
-
-					<tr>
-						<td>
-							<select>
-<option>満潮</option>
-<option>干潮</option>
-</select>
-						</td>
-						<td><input type="time"></td>
-					</tr>
-
-					<tr>
-						<td>
-							<select>
-<option>干潮</option>
-<option>満潮</option>
-</select>
-						</td>
-						<td><input type="time"></td>
-					</tr>
-
-				</tbody>
-			</table>
-
-			<button onclick="saveTideDay()">
-潮を保存
-</button>
-
-		</div>
-
-		<div class="card">
-
-			<h2>釣果登録</h2>
-
-			<div class="input-group">
-				<label>釣れた時間</label>
-				<input type="time" id="fishTime">
-</div>
-
-				<button onclick="saveFish()">
-釣果追加
-</button>
-
-			</div>
-
-			<div class="card">
-
-				<h2>釣果一覧</h2>
+				</div>
 
 				<table>
 
 					<thead>
 						<tr>
-							<th>日付</th>
-							<th>スポット</th>
+							<th>種類</th>
 							<th>時間</th>
-							<th>時合</th>
-							<th>潮回り</th>
-							<th>削除</th>
 						</tr>
 					</thead>
 
-					<tbody id="fishBody">
-					</tbody>
+					<tbody id="tideTable">
 
+						<tr>
+							<td>
+								<select>
+<option>満潮</option>
+<option>干潮</option>
+</select>
+							</td>
+							<td><input type="time"></td>
+						</tr>
+
+						<tr>
+							<td>
+								<select>
+<option>干潮</option>
+<option>満潮</option>
+</select>
+							</td>
+							<td><input type="time"></td>
+						</tr>
+
+						<tr>
+							<td>
+								<select>
+<option>満潮</option>
+<option>干潮</option>
+</select>
+							</td>
+							<td><input type="time"></td>
+						</tr>
+
+						<tr>
+							<td>
+								<select>
+<option>干潮</option>
+<option>満潮</option>
+</select>
+							</td>
+							<td><input type="time"></td>
+						</tr>
+
+					</tbody>
 				</table>
+
+				<button onclick="saveTideDay()">
+潮を保存
+</button>
 
 			</div>
 
 			<div class="card">
 
-				<h2>スポット別時合分析</h2>
+				<h2>釣果登録</h2>
 
-				<select id="graphSpot" onchange="drawSpotGraph()">
+				<div class="input-group">
+					<label>釣れた時間</label>
+					<input type="time" id="fishTime">
+</div>
+
+					<button onclick="saveFish()">
+釣果追加
+</button>
+
+				</div>
+
+				<div class="card">
+
+					<h2>釣果一覧</h2>
+
+					<table>
+
+						<thead>
+							<tr>
+								<th>日付</th>
+								<th>スポット</th>
+								<th>時間</th>
+								<th>時合</th>
+								<th>潮回り</th>
+								<th>削除</th>
+							</tr>
+						</thead>
+
+						<tbody id="fishBody">
+						</tbody>
+
+					</table>
+
+				</div>
+
+				<div class="card">
+
+<h2>スポット別潮位分析</h2>
+
+<select id="graphSpot"
+        onchange="
+            drawSpotGraph();
+            drawTideGraph();
+        ">
+					        onchange="
+					            drawSpotGraph();
+					            drawTideGraph();
+					        ">
 <option value="">選択してください</option>
 </select>
 
-				<canvas id="spotCanvas" width="900" height="500">
-				</canvas>
+					<canvas id="spotCanvas" width="900" height="500">
+					</canvas>
 
-			</div>
+				</div>
 
-			<div class="card">
+				<div class="card">
 
-				<h2>潮回り分析</h2>
+					<h2>潮回り分析</h2>
 
-				<canvas id="tideCanvas" width="900" height="500">
-				</canvas>
+					<canvas id="tideCanvas" width="900" height="500">
+					</canvas>
 
-			</div>
+				</div>
 
-			<div class="card">
+				<div class="card">
 
-				<button onclick="backupData()">
+					<button onclick="backupData()">
 バックアップ
 </button>
 
-				<input
+					<input
 type="file"
 id="restoreFile"
 onchange="restoreData(event)"
 >
 
-				<button
+					<button
 style="background:#e53e3e"
 onclick="deleteAllData()">
 全削除
 </button>
 
-			</div>
+				</div>
 
-			<script>
-				function timeToMin(time){
+				<script>
+					function timeToMin(time){
 
     if(!time){
         return 0;
@@ -645,7 +659,12 @@ function drawSpotGraph(){
 
     const counts =
         new Array(18).fill(0);
+const spot =
+document.getElementById('graphSpot').value;
 
+if(!spot){
+return;
+}
     records.forEach(r=>{
 
         if(r.spot !== spot){
@@ -727,24 +746,27 @@ function drawTideGraph(){
         0,0,0,0,0
     ];
 
-    records.forEach(r=>{
-
-        const index =
-            labels.indexOf(r.tideType);
-
-        if(index >= 0){
-
-            counts[index]++;
-        }
-
-    });
+	records.forEach(r=>{
+	
+	if(r.spot !== spot){
+	return;
+	}
+	
+	const index =
+	labels.indexOf(r.tideType);
+	
+	if(index >= 0){
+	
+	counts[index]++;
+	
+	}
 
     drawBarChart(
         ctx,
         canvas,
         labels,
         counts,
-        '潮回り分析'
+spot + '潮回り分析'
     );
 
 }
@@ -988,6 +1010,9 @@ loadFish();
 
 drawTideGraph();
 
-</script>
+				</script>
+	</body>
+
+	</html>
 </body>
-</html></body><html>
+<html></body><html>
